@@ -1,0 +1,11 @@
+{
+  "name": "demand-hunt",
+  "description": "Demand signal scan every 6 hours across X and Reddit",
+  "schedule": "0 */6 * * *",
+  "timezone": "{{timezone}}",
+  "agent": "scout",
+  "model": "{{model_scout}}",
+  "channel": "{{channel}}",
+  "chat_id": "{{chat_id}}",
+  "prompt": "Quick demand signal check. Search X and Reddit for 'I wish there was', 'would pay for', pain points. Write any quality signals to /research/demand-signals/. Skip if nothing meets triage criteria."
+}

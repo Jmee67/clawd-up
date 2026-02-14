@@ -1,0 +1,11 @@
+{
+  "name": "web-research",
+  "description": "Web research and validation of signals found in X scans",
+  "schedule": "0 11 * * *",
+  "timezone": "{{timezone}}",
+  "agent": "scout",
+  "model": "{{model_scout}}",
+  "channel": "{{channel}}",
+  "chat_id": "{{chat_id}}",
+  "prompt": "Run web research and validation. Use web_search to find pain points on Reddit and web. Validate any signals from today's X scans. Cross-reference with pipeline. Write to /research/web-signals/. See HEARTBEAT.md."
+}

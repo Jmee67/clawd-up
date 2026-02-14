@@ -1,0 +1,11 @@
+{
+  "name": "daily-brief",
+  "description": "Morning ecosystem brief delivered to {{channel}}",
+  "schedule": "0 8 * * *",
+  "timezone": "{{timezone}}",
+  "agent": "scout",
+  "model": "{{model_scout}}",
+  "channel": "{{channel}}",
+  "chat_id": "{{chat_id}}",
+  "prompt": "Run your morning brief. Check ecosystem updates from the last 24h and deliver a concise summary. See HEARTBEAT.md for format."
+}

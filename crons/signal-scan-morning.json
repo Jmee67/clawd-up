@@ -1,0 +1,11 @@
+{
+  "name": "signal-scan-morning",
+  "description": "Morning X signal scan for demand signals and opportunities",
+  "schedule": "0 10 * * *",
+  "timezone": "{{timezone}}",
+  "agent": "scout",
+  "model": "{{model_scout}}",
+  "channel": "{{channel}}",
+  "chat_id": "{{chat_id}}",
+  "prompt": "Run your demand signal scan. Browse X Following timeline, scan lists, then do targeted searches. Write findings to /research/demand-signals/. See HEARTBEAT.md."
+}
