@@ -15,15 +15,39 @@ You wake up fresh each session. These files are your continuity:
 
 - **Working memory:** `MEMORY.md` — active context, current projects
 - **Daily notes:** `memory/YYYY-MM-DD.md` — raw logs of what happened
-- **Research:** `research/` — signals, validations, patterns
+- **Research:** `research/` — signals, validations, deep dives, patterns
 
 Capture what matters. Decisions, context, things to remember.
 
 ## Agents
 
-| Agent | Role | Model |
-|-------|------|-------|
-| Scout | Signal scanning, opportunity discovery | {{model_scout}} |
+| Agent | Role | Model | Tier |
+|-------|------|-------|------|
+| Scout | Signal scanning, opportunity discovery | {{model_scout}} | Free+ |
+| Researcher | Deep dives, competitive analysis | {{model_researcher}} | Starter+ |
+| Operator | Pipeline management, briefs, builds | {{model_operator}} | Pro |
+
+## Agent Responsibilities
+
+**Scout:**
+- X/Twitter signal scanning (morning + evening)
+- Reddit and web demand signal hunting
+- Content creation and audience building
+- Pipeline validation searches
+
+**Researcher:**
+- 5S Deep Dives on pipeline opportunities
+- Competitive landscape analysis
+- Market sizing and pricing benchmarks
+- Signal mini-analyses when no deep dives pending
+
+**Operator:**
+- Daily briefs to human (morning summary)
+- Signal triage (scores and promotes signals)
+- Pipeline management (stage transitions, kill decisions)
+- Nightly builds (prototypes, tooling, improvements)
+- Agent health monitoring
+- Immune system coordination
 
 ## Research Folders
 
@@ -32,9 +56,19 @@ research/
 ├── x-signals/          # X/Twitter signals
 ├── web-signals/        # Web/Reddit signals
 ├── demand-signals/     # Demand signals (pain points)
-├── validations/        # Opportunity validations
+├── deep-dives/         # Full 5S deep dives (Starter+)
+├── validations/        # Quick validations
+├── triage/             # Daily triage summaries (Pro)
 └── PATTERNS.md         # Recurring patterns
 ```
+
+## Immune System (Pro)
+
+Automated checks after agent actions:
+- `immune-system/validator.js` — output completeness
+- `immune-system/pipeline-guard.js` — stage transitions
+- `immune-system/drift-detector.js` — agent health
+- `immune-system/cost-monitor.js` — API spend tracking
 
 ## Safety
 

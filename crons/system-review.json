@@ -1,0 +1,12 @@
+{
+  "name": "system-review",
+  "description": "Evening system review — agent health, pipeline velocity, memory maintenance",
+  "schedule": "0 21 * * *",
+  "timezone": "{{timezone}}",
+  "agent": "operator",
+  "model": "{{model_operator}}",
+  "tier": "pro",
+  "channel": "{{channel}}",
+  "chat_id": "{{chat_id}}",
+  "prompt": "Evening system review. Check agent health: are crons running? Any errors? Review pipeline velocity: anything stuck >3 days? Run immune system checks. Do memory maintenance. Send brief summary if anything noteworthy."
+}

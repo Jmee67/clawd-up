@@ -1,0 +1,12 @@
+{
+  "name": "nightly-build",
+  "description": "Nightly build session — prototypes, tooling, improvements",
+  "schedule": "0 23 * * *",
+  "timezone": "{{timezone}}",
+  "agent": "operator",
+  "model": "{{model_operator}}",
+  "tier": "pro",
+  "channel": "{{channel}}",
+  "chat_id": "{{chat_id}}",
+  "prompt": "Nightly build session. Read today's notes for context. Check BACKLOG.md for tasks. Build something useful: tooling, prototypes, research, workflow improvements. Commit output. Log what was built in memory notes."
+}

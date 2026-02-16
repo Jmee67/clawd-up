@@ -1,0 +1,12 @@
+{
+  "name": "deep-dive",
+  "description": "Researcher deep dive session on pipeline opportunities",
+  "schedule": "0 14 * * *",
+  "timezone": "{{timezone}}",
+  "agent": "researcher",
+  "model": "{{model_researcher}}",
+  "tier": "starter",
+  "channel": "{{channel}}",
+  "chat_id": "{{chat_id}}",
+  "prompt": "Run your deep dive session. Check PIPELINE.md for opportunities in RESEARCHING stage. Pick the highest priority one and write a full 5S deep dive. If no RESEARCHING items, run mini-analyses on top unanalyzed signals. See HEARTBEAT.md."
+}

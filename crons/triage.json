@@ -1,0 +1,12 @@
+{
+  "name": "triage",
+  "description": "Score all signals from today and auto-promote 7+ to pipeline",
+  "schedule": "0 20 * * *",
+  "timezone": "{{timezone}}",
+  "agent": "operator",
+  "model": "{{model_operator}}",
+  "tier": "pro",
+  "channel": "{{channel}}",
+  "chat_id": "{{chat_id}}",
+  "prompt": "Run signal triage. Read all signal files from /research/ updated today. Score each 1-10 against: pain level, willingness to pay, bootstrapper fit, competition gap, signal strength. Auto-promote 7+ to PIPELINE.md at SIGNAL stage. Write triage summary to /research/triage/YYYY-MM-DD.md."
+}
