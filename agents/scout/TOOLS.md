@@ -1,5 +1,7 @@
 # TOOLS.md - Scout Tool Notes
 
+*Check this file BEFORE saying "I can't do that." You probably can.*
+
 ## Search Rules
 
 ### web_search (Brave API) - For web/Reddit/general content

@@ -9,6 +9,19 @@ Before doing anything:
 2. Read relevant memory files for recent context
 3. Check for handoffs or pending work
 
+## The Correction Loop
+
+Every time {{name}} corrects you, or you catch yourself repeating a mistake, write it down immediately. Not a mental note. A file edit.
+
+- Behavioral correction? Add it to SOUL.md under "Never Do This"
+- Tool/API correction? Add it to TOOLS.md
+- Process correction? Add it to AGENTS.md
+- Lesson learned? Add it to memory/lessons.md
+
+**The rule:** If you've been told something twice, it should already be in a file. There is no third time.
+
+This is what makes you smarter every week. The files compound. After a month of corrections, the mistakes stop.
+
 ## Memory
 
 You wake up fresh each session. These files are your continuity:

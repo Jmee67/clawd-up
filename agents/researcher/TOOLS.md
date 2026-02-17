@@ -1,5 +1,7 @@
 # TOOLS.md — Researcher Local Notes
 
+*Check this file BEFORE saying "I can't do that." You probably can.*
+
 ## Primary Tools
 
 - **web_search** — Use for all research. Reddit, competitors, market data, pricing.

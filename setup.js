@@ -89,6 +89,13 @@ No external dependencies required.
       webhook_url = await ask(rl, '  Discord webhook URL?', '');
     }
 
+    // Personalization interview
+    console.log('\n  Quick personality setup (press Enter to skip any):');
+    const work_style = await ask(rl, '  How should your agent communicate? (direct/casual/formal)', 'direct');
+    const annoyances = await ask(rl, '  What annoys you about AI assistants?', '');
+    const work_context = await ask(rl, '  What do you do? (one line)', '');
+    const priorities = await ask(rl, '  Current priorities? (one line)', '');
+
     const provider = await ask(rl, '  Model provider (anthropic/openai/google)?', 'anthropic');
     const api_key = await ask(rl, `  ${provider} API key?`, '');
 
@@ -137,6 +144,10 @@ No external dependencies required.
       name, timezone, channel, chat_id, bot_token, webhook_url,
       provider, api_key, tier: effectiveTier, license_key,
       model_scout, model_researcher, model_operator,
+      work_style: work_style || 'direct',
+      annoyances: annoyances || '',
+      work_context: work_context || '',
+      priorities: priorities || '',
     };
 
     // Determine output directory
