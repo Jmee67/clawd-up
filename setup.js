@@ -37,7 +37,7 @@ function copyAndFill(srcDir, destDir, vars, files) {
 function banner() {
   console.log(`
   ╔═══════════════════════════════════╗
-  ║        🦞 Clawd Up v0.2          ║
+  ║        🦞 Clawd Up v0.3          ║
   ║   AI Business Ops in One Command  ║
   ╚═══════════════════════════════════╝
   `);
