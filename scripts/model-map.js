@@ -2,17 +2,17 @@
 
 const MODEL_MAP = {
   scout: {
-    anthropic: 'claude-sonnet-4-20250514',
+    anthropic: 'anthropic/claude-sonnet-4-5',
     openai: 'gpt-4o-mini',
     google: 'gemini-2.0-flash',
   },
   researcher: {
-    anthropic: 'claude-sonnet-4-20250514',
+    anthropic: 'anthropic/claude-sonnet-4-5',
     openai: 'gpt-4o',
     google: 'gemini-2.0-pro',
   },
   operator: {
-    anthropic: 'claude-opus-4-6',
+    anthropic: 'anthropic/claude-opus-4-6',
     openai: 'gpt-4o',
     google: 'gemini-2.0-pro',
   },

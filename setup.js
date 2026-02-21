@@ -48,7 +48,7 @@ function banner() {
 async function main() {
   if (process.argv.includes('--help') || process.argv.includes('-h')) {
     console.log(`
-Clawd Up v0.2 — Setup Wizard
+Clawd Up v0.3 — Setup Wizard
 
 Usage: node setup.js [--help]
 
@@ -68,7 +68,7 @@ No external dependencies required.
   banner();
 
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-  const root = path.dirname(__filename);
+  const root = __dirname;
 
   try {
     // Collect info
