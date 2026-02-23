@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+
 /* ── Data ── */
 
 const painPoints = [
@@ -100,11 +102,36 @@ const tiers = [
   },
 ];
 
+/* ── Scroll reveal hook ── */
+
+function useScrollReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+    );
+    el.querySelectorAll(".reveal").forEach((child) => observer.observe(child));
+    return () => observer.disconnect();
+  }, []);
+  return ref;
+}
+
 /* ── Component ── */
 
 export default function Landing({ onStart }: { onStart: () => void }) {
+  const revealRef = useScrollReveal();
+
   return (
-    <div className="min-h-screen">
+    <div ref={revealRef} className="min-h-screen">
       {/* ── Nav ── */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
         <div className="max-w-[1080px] mx-auto px-6 h-16 flex items-center justify-between">
@@ -121,15 +148,15 @@ export default function Landing({ onStart }: { onStart: () => void }) {
       {/* ── Hero ── */}
       <section className="min-h-screen flex items-center justify-center px-6 pt-16">
         <div className="text-center max-w-3xl mx-auto">
-          <h1 className="text-5xl sm:text-6xl font-semibold tracking-tight leading-[1.1] text-[#111]">
+          <h1 className="reveal text-5xl sm:text-6xl font-semibold tracking-tight leading-[1.1] text-[#111]">
             Your AI Business<br />
             <span className="text-[#10B981]">Operations Team</span>
           </h1>
-          <p className="mt-6 text-lg sm:text-xl text-[#666] max-w-2xl mx-auto leading-relaxed">
+          <p className="reveal mt-6 text-lg sm:text-xl text-[#666] max-w-2xl mx-auto leading-relaxed">
             Three agents. One install command.<br className="hidden sm:block" />
             Pipeline running by morning.
           </p>
-          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="reveal mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={onStart}
               className="bg-[#10B981] text-white font-semibold px-8 py-3.5 rounded-lg text-lg hover:bg-[#059669] transition-colors cursor-pointer"
@@ -147,7 +174,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
       </section>
 
       {/* ── Social Proof ── */}
-      <section className="border-y border-gray-200 bg-gray-50">
+      <section className="reveal border-y border-gray-200 bg-gray-50">
         <div className="max-w-[1080px] mx-auto px-6 py-8 text-center">
           <p className="text-[#666] text-lg">
             <span className="text-[#111] font-semibold">77,000 developers</span> read about the problem.{" "}
@@ -159,14 +186,14 @@ export default function Landing({ onStart }: { onStart: () => void }) {
       {/* ── Problem / Solution ── */}
       <section className="py-24 px-6">
         <div className="max-w-[1080px] mx-auto">
-          <h2 className="text-3xl font-semibold text-center mb-4 text-[#111]">
+          <h2 className="reveal text-3xl font-semibold text-center mb-4 text-[#111]">
             What takes days to configure,<br />
             <span className="text-[#10B981]">we ship pre-built.</span>
           </h2>
-          <p className="text-[#666] text-center mb-16 text-base">Stop debugging infrastructure. Start running your business.</p>
-          <div className="grid gap-5 sm:grid-cols-2">
+          <p className="reveal text-[#666] text-center mb-16 text-base">Stop debugging infrastructure. Start running your business.</p>
+          <div className="reveal-stagger grid gap-5 sm:grid-cols-2">
             {painPoints.map((p) => (
-              <div key={p.solution} className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+              <div key={p.solution} className="reveal card-hover bg-white rounded-xl border border-gray-200 shadow-sm p-6">
                 <div className="text-2xl mb-3">{p.icon}</div>
                 <p className="text-[#999] line-through text-sm mb-2">{p.problem}</p>
                 <p className="text-[#10B981] font-medium">{p.solution}</p>
@@ -179,31 +206,38 @@ export default function Landing({ onStart }: { onStart: () => void }) {
       {/* ── System vs Prompts ── */}
       <section className="py-24 px-6">
         <div className="max-w-[1080px] mx-auto">
-          <h2 className="text-3xl font-semibold text-center mb-4 text-[#111]">
+          <h2 className="reveal text-3xl font-semibold text-center mb-4 text-[#111]">
             Prompts give you outputs.<br />
             <span className="text-[#10B981]">Systems give you a business.</span>
           </h2>
-          <p className="text-[#666] text-center mb-16 text-base max-w-2xl mx-auto">
+          <p className="reveal text-[#666] text-center mb-16 text-base max-w-2xl mx-auto">
             A $3M agency owner spent weeks building this architecture manually. We ship it pre-configured.
           </p>
 
-          <div className="max-w-3xl mx-auto flex flex-col gap-3">
-            {[
-              { layer: "BRAIN", desc: "SOUL.md + AGENTS.md + USER.md", detail: "Your agent knows who it is, who you are, and how to operate" },
-              { layer: "SKILLS", desc: "14 vetted skills, auto-loaded per task", detail: "Copywriting, research, strategy, pipeline management — each with frameworks and anti-patterns" },
-              { layer: "TOOLS", desc: "Web search, browser, APIs, MCP servers", detail: "External data flows in automatically — no copy-pasting between tools" },
-              { layer: "CONTEXT", desc: "Brand voice, priorities, learnings vault", detail: "Corrections today become rules tomorrow. The system gets sharper every session." },
-              { layer: "AGENTS", desc: "Scout + Researcher + Operator", detail: "Specialists that coordinate, hand off work, and share memory" },
-            ].map((l) => (
-              <div key={l.layer} className="bg-white rounded-xl border border-gray-200 shadow-sm px-6 py-4">
-                <div className="flex items-center gap-3 mb-1">
-                  <span className="text-[#10B981] font-mono text-xs font-bold tracking-widest">{l.layer}</span>
-                  <span className="text-[#999] text-xs">— {l.desc}</span>
+          <div className="reveal max-w-3xl mx-auto">
+            <div className="grid grid-cols-1 gap-3">
+              {[
+                { layer: "BRAIN", desc: "SOUL.md + AGENTS.md + USER.md", detail: "Your agent knows who it is, who you are, and how to operate", width: "100%" },
+                { layer: "SKILLS", desc: "14 vetted skills, auto-loaded per task", detail: "Copywriting, research, strategy, pipeline management — each with frameworks and anti-patterns", width: "88%" },
+                { layer: "TOOLS", desc: "Web search, browser, APIs, MCP servers", detail: "External data flows in automatically — no copy-pasting between tools", width: "76%" },
+                { layer: "CONTEXT", desc: "Brand voice, priorities, learnings vault", detail: "Corrections today become rules tomorrow. The system gets sharper every session.", width: "64%" },
+                { layer: "AGENTS", desc: "Scout + Researcher + Operator", detail: "Specialists that coordinate, hand off work, and share memory", width: "52%" },
+              ].map((l) => (
+                <div key={l.layer} className="reveal flex justify-center">
+                  <div
+                    className="card-hover bg-white border border-gray-200 shadow-sm rounded-xl px-6 py-4"
+                    style={{ width: l.width }}
+                  >
+                    <div className="flex items-center gap-3 mb-1">
+                      <span className="text-[#10B981] font-mono text-xs font-bold tracking-widest">{l.layer}</span>
+                      <span className="text-[#999] text-xs">— {l.desc}</span>
+                    </div>
+                    <p className="text-sm text-[#666]">{l.detail}</p>
+                  </div>
                 </div>
-                <p className="text-sm text-[#666]">{l.detail}</p>
-              </div>
-            ))}
-            <p className="text-center text-[#999] text-sm mt-4">
+              ))}
+            </div>
+            <p className="text-center text-[#999] text-sm mt-6">
               Each layer builds on the last. Start with the brain. Everything else compounds.
             </p>
           </div>
@@ -213,21 +247,17 @@ export default function Landing({ onStart }: { onStart: () => void }) {
       {/* ── How It Works ── */}
       <section id="how-it-works" className="py-24 px-6 bg-gray-50">
         <div className="max-w-[1080px] mx-auto">
-          <h2 className="text-3xl font-semibold text-center mb-16 text-[#111]">
+          <h2 className="reveal text-3xl font-semibold text-center mb-16 text-[#111]">
             Three steps to <span className="text-[#10B981]">liftoff</span>
           </h2>
-          <div className="grid gap-8 md:grid-cols-3 relative">
-            {/* Connecting line */}
-            <div className="hidden md:block absolute top-6 left-[20%] right-[20%] h-px bg-gray-200" />
+          <div className="reveal-stagger grid gap-8 md:grid-cols-3">
             {[
               { step: "01", title: "Configure", desc: "Answer 5 questions about your business, preferences, and tools." },
               { step: "02", title: "Install", desc: "One command on your VPS. Everything deploys automatically." },
               { step: "03", title: "Operate", desc: "Your first brief arrives at 8am your timezone. Pipeline is live." },
-            ].map((s) => (
-              <div key={s.step} className="text-center relative">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm text-[#10B981] font-mono text-sm font-bold mb-4">
-                  {s.step}
-                </div>
+            ].map((s, i) => (
+              <div key={s.step} className={`reveal text-center md:text-left ${i < 2 ? "step-line" : ""}`}>
+                <div className="text-[#10B981] font-mono text-sm mb-2">{s.step}</div>
                 <h3 className="text-xl font-semibold mb-2 text-[#111]">{s.title}</h3>
                 <p className="text-[#666] leading-relaxed">{s.desc}</p>
               </div>
@@ -239,12 +269,12 @@ export default function Landing({ onStart }: { onStart: () => void }) {
       {/* ── Your AI Team ── */}
       <section className="py-24 px-6">
         <div className="max-w-[1080px] mx-auto">
-          <h2 className="text-3xl font-semibold text-center mb-16 text-[#111]">
+          <h2 className="reveal text-3xl font-semibold text-center mb-16 text-[#111]">
             Your AI Team
           </h2>
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="reveal-stagger grid gap-6 md:grid-cols-3">
             {agents.map((a) => (
-              <div key={a.name} className="bg-white rounded-xl border border-gray-200 shadow-sm p-7">
+              <div key={a.name} className="reveal card-hover bg-white rounded-xl border border-gray-200 shadow-sm p-7">
                 <h3 className="text-xl font-semibold text-[#111]">{a.name}</h3>
                 <p className="text-[#666] text-sm mb-4">{a.role}</p>
                 <ul className="space-y-2.5">
@@ -264,10 +294,10 @@ export default function Landing({ onStart }: { onStart: () => void }) {
       {/* ── Comparison Table ── */}
       <section className="py-24 px-6 bg-gray-50">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-semibold text-center mb-16 text-[#111]">
+          <h2 className="reveal text-3xl font-semibold text-center mb-16 text-[#111]">
             Manual Setup <span className="text-[#999]">vs</span> <span className="text-[#10B981]">Clawd Up</span>
           </h2>
-          <div className="overflow-x-auto bg-white rounded-xl border border-gray-200 shadow-sm">
+          <div className="reveal overflow-x-auto bg-white rounded-xl border border-gray-200 shadow-sm">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-200">
@@ -293,15 +323,15 @@ export default function Landing({ onStart }: { onStart: () => void }) {
       {/* ── Pricing ── */}
       <section className="py-24 px-6">
         <div className="max-w-[1080px] mx-auto">
-          <h2 className="text-3xl font-semibold text-center mb-4 text-[#111]">
+          <h2 className="reveal text-3xl font-semibold text-center mb-4 text-[#111]">
             Simple pricing
           </h2>
-          <p className="text-[#666] text-center mb-16 text-base">Buy once. Subscribe for weekly updates from our live system.</p>
-          <div className="grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
+          <p className="reveal text-[#666] text-center mb-16 text-base">Buy once. Subscribe for weekly updates from our live system.</p>
+          <div className="reveal-stagger grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
             {tiers.map((t) => (
               <div
                 key={t.name}
-                className={`bg-white rounded-xl p-7 text-left shadow-sm ${
+                className={`reveal card-hover bg-white rounded-xl p-7 text-left shadow-sm ${
                   t.highlighted ? "border-t-2 border-t-[#10B981] border border-gray-200" : "border border-gray-200"
                 }`}
               >
@@ -332,7 +362,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
       </section>
 
       {/* ── Final CTA ── */}
-      <section className="py-24 px-6 bg-gray-50">
+      <section className="reveal py-24 px-6 bg-gray-50">
         <div className="text-center max-w-2xl mx-auto">
           <h2 className="text-3xl font-semibold mb-4 text-[#111]">
             Ready to stop configuring<br />and start operating?
