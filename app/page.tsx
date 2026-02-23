@@ -41,10 +41,13 @@ export default function Home() {
   const [page, setPage] = useState<"landing" | "onboarding" | "install">("landing");
   const [form, setForm] = useState<FormData>(defaultForm);
 
+  if (page === "landing") {
+    return <Landing onStart={() => setPage("onboarding")} />;
+  }
+
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-2xl">
-        {page === "landing" && <Landing onStart={() => setPage("onboarding")} />}
         {page === "onboarding" && (
           <Onboarding
             form={form}
