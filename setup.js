@@ -55,10 +55,9 @@ Usage: node setup.js [--help]
 Interactive setup wizard that configures your OpenClaw agent team.
 Generates agent configs, cron jobs, templates, and memory scaffolding.
 
-Tiers:
-  Free ($0)    — Scout agent only. Basic signal scanning.
-  Starter ($29) — Scout + Researcher. Deep dives and web research.
-  Pro ($49)     — Full team. Operator, immune system, nightly builds.
+Plans:
+  Clawd Up ($19 one-time) — Full agent team. Scout, Researcher, Operator.
+  + Updates ($9/mo)       — Weekly config updates from our live system.
 
 No external dependencies required.
     `);

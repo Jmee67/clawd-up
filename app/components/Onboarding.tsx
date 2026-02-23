@@ -178,12 +178,11 @@ export default function Onboarding({ form, setForm, onComplete, onBack }: Props)
         {/* Step 5: Tier */}
         {step === 4 && (
           <div className="space-y-5">
-            <h2 className="text-2xl font-bold">Choose Your Tier</h2>
-            <div className="grid gap-3 sm:grid-cols-3">
+            <h2 className="text-2xl font-bold">Choose Your Plan</h2>
+            <div className="grid gap-3 sm:grid-cols-2">
               {([
-                { id: "free" as const, name: "Free", price: "$0", features: ["Scout agent", "Daily scans", "Basic briefs"] },
-                { id: "starter" as const, name: "Starter", price: "$29", features: ["Scout + Researcher", "Market analysis", "Priority signals"] },
-                { id: "pro" as const, name: "Pro", price: "$49", features: ["Full team", "Operator agent", "Auto-pipeline", "Custom workflows"] },
+                { id: "starter" as const, name: "Clawd Up", price: "$19", period: "one-time", features: ["All 3 agents (Scout, Researcher, Operator)", "Pre-configured memory + boot sequence", "Curated skills, crons, templates", "Own it forever"] },
+                { id: "pro" as const, name: "Clawd Up + Updates", price: "$19 + $9", period: "/mo", features: ["Everything in Clawd Up", "Weekly config updates from our live system", "New agent SOULs + skills as we ship them", "Private GitHub repo access"] },
               ]).map((t) => (
                 <button
                   key={t.id}
@@ -191,13 +190,14 @@ export default function Onboarding({ form, setForm, onComplete, onBack }: Props)
                   className={`text-left p-5 rounded-xl border cursor-pointer transition-colors ${form.tier === t.id ? "border-accent bg-accent/10" : "border-border hover:border-muted"}`}
                 >
                   <h3 className="font-semibold">{t.name}</h3>
-                  <p className="text-xl font-bold text-accent">{t.price}<span className="text-xs text-muted">/mo</span></p>
+                  <p className="text-xl font-bold text-accent">{t.price}<span className="text-xs text-muted"> {t.period}</span></p>
                   <ul className="mt-3 space-y-1 text-sm text-muted">
                     {t.features.map((f) => <li key={f}>✓ {f}</li>)}
                   </ul>
                 </button>
               ))}
             </div>
+            <p className="text-xs text-muted text-center">You can also try free — just skip this step and run the install command.</p>
           </div>
         )}
       </div>

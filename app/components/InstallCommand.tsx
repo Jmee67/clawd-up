@@ -33,7 +33,7 @@ export default function InstallCommand({ form, onBack }: { form: FormData; onBac
     return btoa(JSON.stringify(configJson));
   }, [configJson]);
 
-  const command = `curl -fsSL https://raw.githubusercontent.com/Jmee67/clawd-up/master/install.sh | bash -s -- --config "${b64}"`;
+  const command = `curl -fsSL https://raw.githubusercontent.com/Jmee67/clawd-up/main/install.sh | bash -s -- --config "${b64}"`;
 
   const copy = async () => {
     await navigator.clipboard.writeText(command);

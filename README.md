@@ -12,29 +12,24 @@ Clawd Up runs three specialized AI agents that work together as your ops layer:
 
 Each agent has a research-backed expert identity — not a generic "you are a helpful assistant" prompt, but a detailed professional background that produces measurably better output (based on [ExpertPrompting research](https://arxiv.org/abs/2305.14688)).
 
-## What You Get By Tier
+## Pricing
 
-| | Free | Starter ($29/mo) | Pro ($49/mo) |
-|---|---|---|---|
-| **Scout** agent | Yes | Yes | Yes |
-| **Researcher** agent | — | Yes | Yes |
-| **Operator** agent | — | — | Yes |
-| Signal scans | 2x daily | 2x daily + web | Unlimited |
-| Pipeline entries | 5 | 25 | Unlimited |
-| 5S Deep dives | — | Yes | Yes |
-| Daily briefs | — | Yes | Yes |
-| Immune system | — | — | Yes |
-| Nightly builds | — | — | Yes |
-| Signal triage | — | — | Yes |
+### Clawd Up — $19 one-time
+Buy once, own it forever. You get the full agent team:
+- All 3 agents (Scout, Researcher, Operator)
+- Pre-configured memory, boot sequence, handover protocol
+- Curated skills — 28% leaner than default OpenClaw
+- All cron jobs, templates, and pipeline system
+- Immune system, nightly builds, signal triage
+- Telegram or Discord notifications
 
-### Free Tier
-Scout scans X twice daily and delivers a digest of demand signals. You get a pipeline of up to 5 active opportunities. Good for getting a feel for how signal-driven opportunity finding works.
-
-### Starter ($29/mo)
-Everything in Free, plus Researcher writes full 5S deep dives on your pipeline opportunities. Daily briefs summarize overnight activity and recommend next actions. 25 pipeline slots.
-
-### Pro ($49/mo)
-The full system. Operator manages your pipeline end-to-end: morning briefs, automated signal triage (promote/watch/skip), nightly build sessions for prototypes and tooling, immune system checks for agent drift and data quality. Unlimited pipeline.
+### Weekly Updates — +$9/mo (optional)
+Stay current with our live system:
+- Weekly config updates pushed to a private GitHub repo
+- New agent SOULs as we improve them
+- New skills, vetted and tested on our own system
+- New signal sources and kill patterns
+- Cancel anytime
 
 ## Quick Start
 
@@ -55,8 +50,7 @@ The setup wizard asks for:
 1. Your name and timezone
 2. Model provider and API key
 3. Notification channel (Telegram/Discord)
-4. Tier selection (Free / Starter / Pro)
-5. License key (paid tiers — from [gumroad.com](https://gumroad.com))
+4. Your plan (Clawd Up / Clawd Up + Updates)
 
 Setup copies agent configs, cron schedules, and templates into your OpenClaw workspace. Agents start on the next heartbeat.
 

@@ -18,7 +18,7 @@ export interface FormData {
   discordWebhook: string;
   provider: "anthropic" | "openai" | "google";
   apiKey: string;
-  tier: "free" | "starter" | "pro";
+  tier: "starter" | "pro";
 }
 
 const defaultForm: FormData = {
@@ -34,7 +34,7 @@ const defaultForm: FormData = {
   discordWebhook: "",
   provider: "anthropic",
   apiKey: "",
-  tier: "free",
+  tier: "starter",
 };
 
 export default function Home() {

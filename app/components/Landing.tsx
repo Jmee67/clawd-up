@@ -361,6 +361,30 @@ export default function Landing({ onStart }: { onStart: () => void }) {
         </div>
       </section>
 
+      {/* ── FAQ ── */}
+      <section className="py-24 px-6">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="reveal text-3xl font-semibold text-center mb-16 text-[#111]">
+            Common questions
+          </h2>
+          <div className="reveal space-y-6">
+            {[
+              { q: "What do I need to run this?", a: "A VPS (DigitalOcean $12/mo works great), Node.js 18+, an AI API key (Anthropic, OpenAI, or Google), and a Telegram bot or Discord webhook for notifications." },
+              { q: "Is this a SaaS or do I self-host?", a: "Self-hosted. You run it on your own server. Your data, your API keys, your agents. We never see your pipeline." },
+              { q: "What's the difference between the one-time purchase and the subscription?", a: "The $19 one-time gets you the full system as-is. The $9/mo subscription gives you weekly updates — new agent configurations, skills, and signal sources from our live production system." },
+              { q: "Can I cancel the updates subscription?", a: "Yes, anytime. You keep everything you've already received. The agents keep running — you just stop getting weekly updates." },
+              { q: "How much does the AI API cost?", a: "Depends on usage. Most users spend $30-80/mo on API calls. Scout and Researcher use Sonnet (cheap). Only the Operator uses Opus for complex decisions." },
+              { q: "What if I break something?", a: "The immune system catches drift and data quality issues. Agent configs are version-controlled. Worst case, re-run setup.js to reset." },
+            ].map((faq) => (
+              <div key={faq.q} className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                <h3 className="font-semibold text-[#111] mb-2">{faq.q}</h3>
+                <p className="text-sm text-[#666] leading-relaxed">{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Final CTA ── */}
       <section className="reveal py-24 px-6 bg-gray-50">
         <div className="text-center max-w-2xl mx-auto">
@@ -372,7 +396,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             onClick={onStart}
             className="bg-[#10B981] text-white font-semibold px-10 py-4 rounded-lg text-lg hover:bg-[#059669] transition-colors cursor-pointer"
           >
-            Get Started — It&apos;s Free
+            Get Started — $19 One-Time
           </button>
         </div>
       </section>
