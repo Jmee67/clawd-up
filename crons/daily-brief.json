@@ -1,11 +1,11 @@
 {
   "name": "daily-brief",
-  "description": "Morning ecosystem brief delivered to {{channel}}",
+  "description": "Morning ecosystem brief delivered to telegram",
   "schedule": "0 8 * * *",
-  "timezone": "{{timezone}}",
+  "timezone": "UTC",
   "agent": "scout",
-  "model": "{{model_scout}}",
-  "channel": "{{channel}}",
-  "chat_id": "{{chat_id}}",
+  "model": "anthropic/claude-sonnet-4-5",
+  "channel": "telegram",
+  "chat_id": "123",
   "prompt": "Run your morning brief. Check ecosystem updates from the last 24h and deliver a concise summary. See HEARTBEAT.md for format."
 }

@@ -4,8 +4,8 @@ You are triggered by scheduled heartbeats and cron jobs.
 
 ## Daily Tasks (Cron Jobs)
 
-### Morning Brief (8am {{timezone}})
-Scan ecosystem updates and deliver brief to {{name}} via {{channel}}.
+### Morning Brief (8am UTC)
+Scan ecosystem updates and deliver brief to Test via telegram.
 
 **Sources to check:**
 1. X mentions of relevant keywords (last 24h)
@@ -27,7 +27,7 @@ Scan ecosystem updates and deliver brief to {{name}} via {{channel}}.
 - [Any emerging themes]
 ```
 
-**Delivery:** Send via {{channel}}. Keep brief (3-5 bullets). If nothing: "No major updates today."
+**Delivery:** Send via telegram. Keep brief (3-5 bullets). If nothing: "No major updates today."
 
 ### Demand Signal Scan (morning + evening)
 
@@ -47,7 +47,7 @@ Scan ecosystem updates and deliver brief to {{name}} via {{channel}}.
 - Quick competitor check before writing
 - Write signals to `/research/demand-signals/YYYY-MM-DD-slug.md`
 
-### Web Research + Validation (11am {{timezone}})
+### Web Research + Validation (11am UTC)
 - Use web_search to find pain points on Reddit and web
 - Validate signals found in X scans
 - Cross-reference with existing pipeline opportunities

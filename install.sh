@@ -74,9 +74,33 @@ else
   START_GATEWAY=true
 fi
 
-# ── Run setup wizard ─────────────────────────────────────
+# ── Parse arguments ──────────────────────────────────────
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_B64=""
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --config) CONFIG_B64="$2"; shift 2 ;;
+    *) shift ;;
+  esac
+done
+
+# ── Clone Clawd Up if not already present ────────────────
+
+CLAWDUP_DIR="${HOME}/.openclaw/clawdup"
+if [ ! -d "$CLAWDUP_DIR" ]; then
+  info "Downloading Clawd Up..."
+  git clone --depth 1 https://github.com/Jmee67/clawd-up.git "$CLAWDUP_DIR" 2>/dev/null || {
+    error "Failed to clone Clawd Up repo"
+    exit 1
+  }
+  info "Clawd Up downloaded"
+else
+  info "Clawd Up already installed at $CLAWDUP_DIR"
+fi
+
+SCRIPT_DIR="$CLAWDUP_DIR"
+
+# ── Run setup wizard ─────────────────────────────────────
 
 echo ""
 echo -e "${BOLD}  Starting setup wizard...${NC}"
@@ -84,7 +108,15 @@ echo ""
 
 # Set workspace to OpenClaw's workspace directory
 export OPENCLAW_WORKSPACE="${HOME}/.openclaw/workspace"
-node "${SCRIPT_DIR}/setup.js"
+
+if [ -n "$CONFIG_B64" ]; then
+  # Pre-filled config from web onboarding — skip interactive wizard
+  CONFIG_JSON=$(echo "$CONFIG_B64" | base64 -d)
+  export CLAWD_CONFIG="$CONFIG_JSON"
+  node "${SCRIPT_DIR}/setup.js" --from-config
+else
+  node "${SCRIPT_DIR}/setup.js"
+fi
 
 SETUP_EXIT=$?
 if [ $SETUP_EXIT -ne 0 ]; then

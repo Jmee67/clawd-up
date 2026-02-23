@@ -2,10 +2,10 @@
   "name": "signal-scan-evening",
   "description": "Evening X signal scan for demand signals and opportunities",
   "schedule": "0 22 * * *",
-  "timezone": "{{timezone}}",
+  "timezone": "UTC",
   "agent": "scout",
-  "model": "{{model_scout}}",
-  "channel": "{{channel}}",
-  "chat_id": "{{chat_id}}",
+  "model": "anthropic/claude-sonnet-4-5",
+  "channel": "telegram",
+  "chat_id": "123",
   "prompt": "Run your evening demand signal scan. Browse X feed, scan lists, do targeted searches. Write findings to /research/demand-signals/. See HEARTBEAT.md."
 }

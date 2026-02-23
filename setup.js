@@ -67,20 +67,48 @@ No external dependencies required.
 
   banner();
 
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
   const root = __dirname;
+  const fromConfig = process.argv.includes('--from-config');
+
+  let name, timezone, channel, chat_id, bot_token, webhook_url;
+  let work_style, annoyances, work_context, priorities;
+  let provider, api_key, tier, license_key, licenseValid;
 
   try {
-    // Collect info
-    const name = await ask(rl, '  What\'s your name?', '');
+
+  if (fromConfig && process.env.CLAWD_CONFIG) {
+    // Pre-filled from web onboarding
+    const cfg = JSON.parse(process.env.CLAWD_CONFIG);
+    name = cfg.name;
+    timezone = cfg.timezone || 'UTC';
+    channel = cfg.channel || 'telegram';
+    chat_id = cfg.chat_id || '';
+    bot_token = cfg.bot_token || '';
+    webhook_url = cfg.webhook_url || '';
+    work_style = cfg.work_style || 'direct';
+    annoyances = cfg.annoyances || '';
+    work_context = cfg.work_context || '';
+    priorities = cfg.priorities || '';
+    provider = cfg.provider || 'anthropic';
+    api_key = cfg.api_key || '';
+    tier = cfg.tier || 'free';
+    license_key = cfg.license_key || '';
+    licenseValid = false;
+
+    console.log(`  Using config from web onboarding for ${name}`);
+  } else {
+    // Interactive wizard
+    const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+
+    name = await ask(rl, '  What\'s your name?', '');
     if (!name) { console.log('  Name is required.'); process.exit(1); }
 
-    const timezone = await ask(rl, '  Timezone?', 'UTC');
-    const channel = await ask(rl, '  Notification channel (telegram/discord)?', 'telegram');
+    timezone = await ask(rl, '  Timezone?', 'UTC');
+    channel = await ask(rl, '  Notification channel (telegram/discord)?', 'telegram');
 
-    let chat_id = '';
-    let bot_token = '';
-    let webhook_url = '';
+    chat_id = '';
+    bot_token = '';
+    webhook_url = '';
 
     if (channel === 'telegram') {
       bot_token = await ask(rl, '  Telegram bot token?', '');
@@ -89,26 +117,23 @@ No external dependencies required.
       webhook_url = await ask(rl, '  Discord webhook URL?', '');
     }
 
-    // Personalization interview
     console.log('\n  Quick personality setup (press Enter to skip any):');
-    const work_style = await ask(rl, '  How should your agent communicate? (direct/casual/formal)', 'direct');
-    const annoyances = await ask(rl, '  What annoys you about AI assistants?', '');
-    const work_context = await ask(rl, '  What do you do? (one line)', '');
-    const priorities = await ask(rl, '  Current priorities? (one line)', '');
+    work_style = await ask(rl, '  How should your agent communicate? (direct/casual/formal)', 'direct');
+    annoyances = await ask(rl, '  What annoys you about AI assistants?', '');
+    work_context = await ask(rl, '  What do you do? (one line)', '');
+    priorities = await ask(rl, '  Current priorities? (one line)', '');
 
-    const provider = await ask(rl, '  Model provider (anthropic/openai/google)?', 'anthropic');
-    const api_key = await ask(rl, `  ${provider} API key?`, '');
+    provider = await ask(rl, '  Model provider (anthropic/openai/google)?', 'anthropic');
+    api_key = await ask(rl, `  ${provider} API key?`, '');
 
-    // Tier selection
     console.log('\n  Tiers:');
     console.log('    free    — Scout only ($0/mo)');
     console.log('    starter — Scout + Researcher ($29/mo)');
     console.log('    pro     — Full team + immune system ($49/mo)');
-    const tier = await ask(rl, '\n  Tier?', 'free');
+    tier = await ask(rl, '\n  Tier?', 'free');
 
-    // License key for paid tiers
-    let license_key = '';
-    let licenseValid = false;
+    license_key = '';
+    licenseValid = false;
     if (tier !== 'free') {
       license_key = await ask(rl, '  License key (from lemonsqueezy.com)?', '');
       if (license_key) {
@@ -123,17 +148,18 @@ No external dependencies required.
           }
         } catch (err) {
           console.log(`  ⚠️  Could not validate (${err.message}). Proceeding with selected tier.`);
-          licenseValid = true; // Offline grace
+          licenseValid = true;
         }
       } else {
         console.log('  ⚠️  No license key. Features will be limited to free tier.');
       }
     }
 
+    rl.close();
+  }
+
     const effectiveTier = (tier === 'free' || (!license_key && tier !== 'free')) ? 'free' : tier;
     const tierDef = getTier(effectiveTier);
-
-    rl.close();
 
     // Resolve models
     const model_scout = getModel('scout', provider);

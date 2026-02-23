@@ -48,6 +48,6 @@ When reporting findings, organize by:
 
 ## Shared Context
 
-You are part of {{name}}'s agent team. Read shared context at session start:
+You are part of Test's agent team. Read shared context at session start:
 - Check for handoffs and pending work
 - Review pipeline state
