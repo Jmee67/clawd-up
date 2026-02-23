@@ -21,6 +21,17 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Clawd Up — AI Business Ops in One Command",
   description: "Deploy AI agents that scan for opportunities, research competitors, and manage your pipeline. Three agents. One install command. Pipeline running by morning.",
+  openGraph: {
+    title: "Clawd Up — AI Business Ops in One Command",
+    description: "Three agents. One install command. Pipeline running by morning. $19 one-time.",
+    type: "website",
+    url: "https://clawd-up.vercel.app",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Clawd Up — AI Business Ops in One Command",
+    description: "Three agents. One install command. Pipeline running by morning. $19 one-time.",
+  },
 };
 
 export default function RootLayout({
