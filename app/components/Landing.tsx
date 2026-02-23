@@ -207,6 +207,48 @@ export default function Landing({ onStart }: { onStart: () => void }) {
         </div>
       </section>
 
+      {/* ── System vs Prompts ── */}
+      <section className="py-28 px-6">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="reveal text-3xl sm:text-4xl font-bold text-center mb-4">
+            Prompts give you outputs.<br />
+            <span className="text-accent">Systems give you a business.</span>
+          </h2>
+          <p className="reveal text-muted text-center mb-16 text-lg max-w-2xl mx-auto">
+            A $3M agency owner spent weeks building this architecture manually. We ship it pre-configured.
+          </p>
+
+          {/* Architecture diagram */}
+          <div className="reveal max-w-3xl mx-auto">
+            <div className="grid grid-cols-1 gap-3">
+              {[
+                { layer: "BRAIN", desc: "SOUL.md + AGENTS.md + USER.md", detail: "Your agent knows who it is, who you are, and how to operate", width: "100%" },
+                { layer: "SKILLS", desc: "14 vetted skills, auto-loaded per task", detail: "Copywriting, research, strategy, pipeline management — each with frameworks and anti-patterns", width: "88%" },
+                { layer: "TOOLS", desc: "Web search, browser, APIs, MCP servers", detail: "External data flows in automatically — no copy-pasting between tools", width: "76%" },
+                { layer: "CONTEXT", desc: "Brand voice, priorities, learnings vault", detail: "Corrections today become rules tomorrow. The system gets sharper every session.", width: "64%" },
+                { layer: "AGENTS", desc: "Scout + Researcher + Operator", detail: "Specialists that coordinate, hand off work, and share memory", width: "52%" },
+              ].map((l) => (
+                <div key={l.layer} className="reveal flex justify-center">
+                  <div
+                    className="bg-card border border-border rounded-xl px-6 py-4 card-glow transition-all duration-300"
+                    style={{ width: l.width }}
+                  >
+                    <div className="flex items-center gap-3 mb-1">
+                      <span className="text-accent font-mono text-xs font-bold tracking-widest">{l.layer}</span>
+                      <span className="text-muted text-xs">— {l.desc}</span>
+                    </div>
+                    <p className="text-sm text-foreground/70">{l.detail}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="text-center text-muted text-sm mt-6">
+              Each layer builds on the last. Start with the brain. Everything else compounds.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* ── How It Works ── */}
       <section id="how-it-works" className="py-28 px-6 bg-card/20">
         <div className="max-w-5xl mx-auto">
