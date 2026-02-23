@@ -74,32 +74,34 @@ const comparisonRows = [
 
 const tiers = [
   {
-    name: "Free",
-    price: "$0",
-    tag: "Start here",
-    highlighted: false,
-    features: ["Scout agent", "Daily opportunity scan", "Basic pipeline tracking", "Telegram or Discord briefs"],
-  },
-  {
-    name: "Pro",
-    price: "$49",
-    tag: "Most popular",
+    name: "Clawd Up",
+    price: "$19",
+    period: "one-time",
+    tag: "Full agent pack",
     highlighted: true,
     features: [
-      "All three agents",
-      "Everything in Starter",
-      "Operator agent",
-      "Auto-pipeline management",
-      "Custom workflows",
-      "Priority support",
+      "All 3 agents (Scout, Researcher, Operator)",
+      "Pre-configured memory + boot sequence",
+      "Curated skills — no bloat",
+      "Cron jobs, templates, pipeline system",
+      "Telegram or Discord briefs",
+      "Own it forever",
     ],
   },
   {
-    name: "Starter",
-    price: "$29",
-    tag: "Add research",
+    name: "Updates",
+    price: "$9",
+    period: "/mo",
+    tag: "Stay sharp",
     highlighted: false,
-    features: ["Scout + Researcher", "Everything in Free", "Competitor research", "Market analysis", "Priority signals"],
+    features: [
+      "Weekly config updates from our live system",
+      "New agent SOULs as we improve them",
+      "New skills, vetted and tested",
+      "New signal sources + kill patterns",
+      "Private GitHub repo access",
+      "Cancel anytime",
+    ],
   },
 ];
 
@@ -290,8 +292,8 @@ export default function Landing({ onStart }: { onStart: () => void }) {
           <h2 className="reveal text-3xl sm:text-4xl font-bold text-center mb-4">
             Simple pricing
           </h2>
-          <p className="reveal text-muted text-center mb-16 text-lg">Start free. Scale when you&apos;re ready.</p>
-          <div className="reveal-stagger grid gap-6 md:grid-cols-3">
+          <p className="reveal text-muted text-center mb-16 text-lg">Buy once. Subscribe for weekly updates from our live system.</p>
+          <div className="reveal-stagger grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
             {tiers.map((t) => (
               <div
                 key={t.name}
@@ -309,7 +311,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
                 </div>
                 <div className="mt-2 mb-5">
                   <span className="text-3xl font-bold">{t.price}</span>
-                  <span className="text-muted text-sm">/mo</span>
+                  <span className="text-muted text-sm">{t.period}</span>
                 </div>
                 <ul className="space-y-2.5">
                   {t.features.map((f) => (
