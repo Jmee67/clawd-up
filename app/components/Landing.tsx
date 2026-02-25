@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 
 /* ── Data ── */
 
@@ -168,6 +169,9 @@ function Nav({ onStart }: { onStart: () => void }) {
           Clawd Up
         </span>
         <div className="flex items-center gap-4">
+          <Link href="/demo" className="text-sm text-text-secondary hover:text-text-primary transition-colors hidden sm:block">
+            Demo
+          </Link>
           <a href="#pricing" className="text-sm text-text-secondary hover:text-text-primary transition-colors hidden sm:block">
             Pricing
           </a>
@@ -220,12 +224,12 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             >
               Get Clawd Up — $19
             </button>
-            <a
-              href="#how-it-works"
+            <Link
+              href="/demo"
               className="btn-secondary px-8 py-3.5 text-lg cursor-pointer text-center"
             >
-              See how it works
-            </a>
+              See a live demo
+            </Link>
           </div>
           <div className="reveal mt-16">
             <Terminal />
