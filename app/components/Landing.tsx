@@ -1,106 +1,133 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /* ── Data ── */
-
-const painPoints = [
-  {
-    icon: "🧠",
-    problem: "Spend days configuring agent memory & decay scoring",
-    solution: "Memory system pre-configured with sane defaults",
-  },
-  {
-    icon: "🔍",
-    problem: "Search returns garbage — need hybrid search + QMD tuning",
-    solution: "Intelligent retrieval works out of the box",
-  },
-  {
-    icon: "📋",
-    problem: "Write boot sequences, handover protocols, compaction recovery",
-    solution: "All operational protocols ship included",
-  },
-  {
-    icon: "⚙️",
-    problem: "Audit 51 skills, cut bloat, save tokens manually",
-    solution: "Curated skill set — 28% leaner from day one",
-  },
-];
 
 const agents = [
   {
     name: "Scout",
-    role: "Opportunity Hunter",
-    bullets: [
-      "Scans web for leads matching your ICP",
-      "Monitors competitor launches & pricing changes",
-      "Surfaces relevant discussions on Reddit, HN, Twitter",
-      "Delivers daily opportunity digest",
-    ],
+    role: "Finds opportunities",
+    desc: "Scans Reddit, HN, X, and the web for bleeding-neck problems in your niche. Delivers a daily digest of leads worth pursuing.",
+    color: "#6366f1",
   },
   {
     name: "Researcher",
-    role: "Deep Analysis",
-    bullets: [
-      "Deep-dives competitors and market segments",
-      "Builds research briefs on demand",
-      "Tracks industry trends and shifts",
-      "Synthesizes findings into actionable insights",
-    ],
+    role: "Validates markets",
+    desc: "Deep-dives competitors, sizes markets, scores opportunities against your rubric. Kills bad ideas before you waste time.",
+    color: "#818cf8",
   },
   {
     name: "Operator",
-    role: "Pipeline Manager",
-    bullets: [
-      "Manages your sales pipeline end-to-end",
-      "Sends daily briefs at 8am your timezone",
-      "Auto-prioritizes tasks and follow-ups",
-      "Custom workflows for your business",
-    ],
+    role: "Runs your pipeline",
+    desc: "Manages your opportunity pipeline end-to-end. Morning briefs, nightly builds, comment monitoring. Works while you sleep.",
+    color: "#10b981",
   },
 ];
 
 const comparisonRows = [
-  { item: "Agent memory & context", manual: "Find docs, configure, test", clawdup: "Pre-configured" },
-  { item: "Search quality", manual: "Set up hybrid search + QMD", clawdup: "Works instantly" },
-  { item: "Boot sequence", manual: "Write AGENTS.md manually", clawdup: "Included" },
-  { item: "Compaction recovery", manual: "Build handover protocol", clawdup: "Built-in" },
-  { item: "Skill curation", manual: "Audit 51 → 32 skills", clawdup: "Ships curated" },
-  { item: "Total setup time", manual: "3–5 days", clawdup: "5 minutes" },
+  { item: "Agent memory & boot sequence", manual: "3-5 days configuring", us: "Pre-built" },
+  { item: "Skill curation", manual: "Audit 51 skills manually", us: "28% leaner from day one" },
+  { item: "Search & retrieval", manual: "Set up hybrid search + QMD", us: "Works instantly" },
+  { item: "Compaction recovery", manual: "Build handover protocol", us: "Built-in" },
+  { item: "Multi-agent coordination", manual: "Write from scratch", us: "Handoffs + shared memory" },
+  { item: "Total setup time", manual: "3-5 days", us: "5 minutes" },
 ];
 
-const tiers = [
+const faqs = [
   {
-    name: "Clawd Up",
-    price: "$19",
-    period: "one-time",
-    tag: "Full agent pack",
-    highlighted: true,
-    features: [
-      "All 3 agents (Scout, Researcher, Operator)",
-      "Pre-configured memory + boot sequence",
-      "Curated skills — no bloat",
-      "Cron jobs, templates, pipeline system",
-      "Telegram or Discord briefs",
-      "Own it forever",
-    ],
+    q: "What do I need to run this?",
+    a: "A VPS (we recommend Hetzner CAX21, $7.50/mo), Node.js 18+, and an AI API key (Anthropic recommended). We walk you through everything.",
   },
   {
-    name: "Updates",
-    price: "$9",
-    period: "/mo",
-    tag: "Stay sharp",
-    highlighted: false,
-    features: [
-      "Weekly config updates from our live system",
-      "New agent SOULs as we improve them",
-      "New skills, vetted and tested",
-      "New signal sources + kill patterns",
-      "Private GitHub repo access",
-      "Cancel anytime",
-    ],
+    q: "Why self-hosted? Why not a cloud service?",
+    a: "Your data. Your API keys. Your agents. We never see your pipeline, your leads, or your business strategy. You own everything.",
+  },
+  {
+    q: "What's the $9/mo subscription for?",
+    a: "Weekly updates from our production system — new agent configs, skills, signal sources, and kill patterns. Cancel anytime. You keep everything.",
+  },
+  {
+    q: "How much does the AI API cost to run?",
+    a: "Most users spend $30-80/mo on API calls. Scout and Researcher use Sonnet (cheap). Only the Operator uses Opus for complex decisions.",
+  },
+  {
+    q: "What if I break something?",
+    a: "The immune system catches drift. Configs are version-controlled. Worst case, re-run setup to reset to known-good state.",
   },
 ];
+
+/* ── Terminal animation ── */
+
+const terminalLines = [
+  { text: "$ curl -sSL https://clawd-up.sh | bash", delay: 0, type: "input" as const },
+  { text: "Installing Clawd Up v0.3.2...", delay: 800, type: "output" as const },
+  { text: "Configuring Scout agent...", delay: 1400, type: "output" as const },
+  { text: "Configuring Researcher agent...", delay: 1800, type: "output" as const },
+  { text: "Configuring Operator agent...", delay: 2200, type: "output" as const },
+  { text: "Starting cron scheduler (23 jobs)...", delay: 2800, type: "output" as const },
+  { text: "Your first brief arrives at 8:00 AM.", delay: 3400, type: "success" as const },
+  { text: "Pipeline is live.", delay: 3800, type: "success" as const },
+];
+
+function Terminal() {
+  const [visibleLines, setVisibleLines] = useState(0);
+
+  useEffect(() => {
+    const timers = terminalLines.map((line, i) =>
+      setTimeout(() => setVisibleLines(i + 1), line.delay)
+    );
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  return (
+    <div className="terminal max-w-xl mx-auto">
+      <div className="terminal-header">
+        <div className="terminal-dot" style={{ background: "#ff5f57" }} />
+        <div className="terminal-dot" style={{ background: "#febc2e" }} />
+        <div className="terminal-dot" style={{ background: "#28c840" }} />
+        <span className="text-text-muted text-xs ml-2">terminal</span>
+      </div>
+      <div className="p-4 text-sm leading-relaxed" style={{ minHeight: 220 }}>
+        {terminalLines.slice(0, visibleLines).map((line, i) => (
+          <div
+            key={i}
+            className={`${
+              line.type === "input"
+                ? "text-text-primary font-semibold"
+                : line.type === "success"
+                ? "text-green"
+                : "text-text-muted"
+            }`}
+          >
+            {line.text}
+            {i === visibleLines - 1 && <span className="cursor-blink text-accent ml-0.5">|</span>}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── FAQ Accordion ── */
+
+function FaqItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <button
+      onClick={() => setOpen(!open)}
+      className="w-full text-left card p-5 cursor-pointer"
+    >
+      <div className="flex items-center justify-between">
+        <h3 className="font-semibold text-text-primary text-[15px]">{q}</h3>
+        <span className="text-text-muted text-lg ml-4 shrink-0">{open ? "−" : "+"}</span>
+      </div>
+      {open && (
+        <p className="text-sm text-text-secondary leading-relaxed mt-3">{a}</p>
+      )}
+    </button>
+  );
+}
 
 /* ── Scroll reveal hook ── */
 
@@ -112,12 +139,10 @@ function useScrollReveal() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("visible");
-          }
+          if (e.isIntersecting) e.target.classList.add("visible");
         });
       },
-      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+      { threshold: 0.08, rootMargin: "0px 0px -30px 0px" }
     );
     el.querySelectorAll(".reveal").forEach((child) => observer.observe(child));
     return () => observer.disconnect();
@@ -125,193 +150,219 @@ function useScrollReveal() {
   return ref;
 }
 
-/* ── Component ── */
+/* ── Nav with scroll detection ── */
+
+function Nav({ onStart }: { onStart: () => void }) {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
+  return (
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "nav-scrolled" : ""}`}>
+      <div className="max-w-[1080px] mx-auto px-6 h-16 flex items-center justify-between">
+        <span className="text-lg font-semibold tracking-tight text-text-primary">
+          Clawd Up
+        </span>
+        <div className="flex items-center gap-4">
+          <a href="#pricing" className="text-sm text-text-secondary hover:text-text-primary transition-colors hidden sm:block">
+            Pricing
+          </a>
+          <a href="#faq" className="text-sm text-text-secondary hover:text-text-primary transition-colors hidden sm:block">
+            FAQ
+          </a>
+          <button
+            onClick={onStart}
+            className={`btn-primary text-sm px-5 py-2 cursor-pointer transition-all duration-300 ${
+              scrolled ? "opacity-100" : "opacity-0 pointer-events-none sm:opacity-100 sm:pointer-events-auto"
+            }`}
+          >
+            Get Started
+          </button>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+/* ── Main Component ── */
 
 export default function Landing({ onStart }: { onStart: () => void }) {
   const revealRef = useScrollReveal();
 
   return (
     <div ref={revealRef} className="min-h-screen">
-      {/* ── Nav ── */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
-        <div className="max-w-[1080px] mx-auto px-6 h-16 flex items-center justify-between">
-          <span className="text-lg font-semibold tracking-tight text-[#111]">Clawd Up</span>
-          <button
-            onClick={onStart}
-            className="bg-[#10B981] text-white text-sm font-semibold px-5 py-2 rounded-lg hover:bg-[#059669] transition-colors cursor-pointer"
-          >
-            Get Started
-          </button>
-        </div>
-      </nav>
+      <Nav onStart={onStart} />
 
       {/* ── Hero ── */}
-      <section className="min-h-screen flex items-center justify-center px-6 pt-16">
-        <div className="text-center max-w-3xl mx-auto">
-          <h1 className="reveal text-5xl sm:text-6xl font-semibold tracking-tight leading-[1.1] text-[#111]">
-            Your AI Business<br />
-            <span className="text-[#10B981]">Operations Team</span>
+      <section className="hero-gradient min-h-screen flex items-center justify-center px-6 pt-16 relative">
+        <div className="text-center max-w-3xl mx-auto relative z-10">
+          <div className="reveal inline-block mb-6">
+            <span className="text-xs font-medium text-accent-light tracking-wide uppercase px-3 py-1.5 rounded-full border border-accent/20 bg-accent/5">
+              Self-hosted AI agents for solo founders
+            </span>
+          </div>
+          <h1 className="reveal text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.08]">
+            Your AI agent.<br />
+            Your server.<br />
+            <span className="gradient-text">Your rules.</span>
           </h1>
-          <p className="reveal mt-6 text-lg sm:text-xl text-[#666] max-w-2xl mx-auto leading-relaxed">
-            Three agents. One install command.<br className="hidden sm:block" />
-            Pipeline running by morning.
+          <p className="reveal mt-6 text-lg sm:text-xl text-text-secondary max-w-xl mx-auto leading-relaxed">
+            Three agents that find opportunities, validate markets, and run your pipeline. One install command. Running by morning.
           </p>
           <div className="reveal mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={onStart}
-              className="bg-[#10B981] text-white font-semibold px-8 py-3.5 rounded-lg text-lg hover:bg-[#059669] transition-colors cursor-pointer"
+              className="btn-primary px-8 py-3.5 text-lg cursor-pointer"
             >
-              Get Started
+              Get Clawd Up — $19
             </button>
             <a
               href="#how-it-works"
-              className="border border-gray-200 text-[#111] font-medium px-8 py-3.5 rounded-lg text-lg hover:border-gray-400 transition-colors cursor-pointer text-center"
+              className="btn-secondary px-8 py-3.5 text-lg cursor-pointer text-center"
             >
               See how it works
             </a>
+          </div>
+          <div className="reveal mt-16">
+            <Terminal />
           </div>
         </div>
       </section>
 
       {/* ── Social Proof ── */}
-      <section className="reveal border-y border-gray-200 bg-gray-50">
-        <div className="max-w-[1080px] mx-auto px-6 py-8 text-center">
-          <p className="text-[#666] text-lg">
-            <span className="text-[#111] font-semibold">77,000 developers</span> read about the problem.{" "}
-            <span className="text-[#10B981] font-semibold">We built the solution.</span>
-          </p>
-        </div>
-      </section>
-
-      {/* ── Problem / Solution ── */}
-      <section className="py-24 px-6">
-        <div className="max-w-[1080px] mx-auto">
-          <h2 className="reveal text-3xl font-semibold text-center mb-4 text-[#111]">
-            What takes days to configure,<br />
-            <span className="text-[#10B981]">we ship pre-built.</span>
-          </h2>
-          <p className="reveal text-[#666] text-center mb-16 text-base">Stop debugging infrastructure. Start running your business.</p>
-          <div className="reveal-stagger grid gap-5 sm:grid-cols-2">
-            {painPoints.map((p) => (
-              <div key={p.solution} className="reveal card-hover bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-                <div className="text-2xl mb-3">{p.icon}</div>
-                <p className="text-[#999] line-through text-sm mb-2">{p.problem}</p>
-                <p className="text-[#10B981] font-medium">{p.solution}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── System vs Prompts ── */}
-      <section className="py-24 px-6">
-        <div className="max-w-[1080px] mx-auto">
-          <h2 className="reveal text-3xl font-semibold text-center mb-4 text-[#111]">
-            Prompts give you outputs.<br />
-            <span className="text-[#10B981]">Systems give you a business.</span>
-          </h2>
-          <p className="reveal text-[#666] text-center mb-16 text-base max-w-2xl mx-auto">
-            A $3M agency owner spent weeks building this architecture manually. We ship it pre-configured.
-          </p>
-
-          <div className="reveal max-w-3xl mx-auto">
-            <div className="grid grid-cols-1 gap-3">
-              {[
-                { layer: "BRAIN", desc: "SOUL.md + AGENTS.md + USER.md", detail: "Your agent knows who it is, who you are, and how to operate", width: "100%" },
-                { layer: "SKILLS", desc: "14 vetted skills, auto-loaded per task", detail: "Copywriting, research, strategy, pipeline management — each with frameworks and anti-patterns", width: "88%" },
-                { layer: "TOOLS", desc: "Web search, browser, APIs, MCP servers", detail: "External data flows in automatically — no copy-pasting between tools", width: "76%" },
-                { layer: "CONTEXT", desc: "Brand voice, priorities, learnings vault", detail: "Corrections today become rules tomorrow. The system gets sharper every session.", width: "64%" },
-                { layer: "AGENTS", desc: "Scout + Researcher + Operator", detail: "Specialists that coordinate, hand off work, and share memory", width: "52%" },
-              ].map((l) => (
-                <div key={l.layer} className="reveal flex justify-center">
-                  <div
-                    className="card-hover bg-white border border-gray-200 shadow-sm rounded-xl px-6 py-4"
-                    style={{ width: l.width }}
-                  >
-                    <div className="flex items-center gap-3 mb-1">
-                      <span className="text-[#10B981] font-mono text-xs font-bold tracking-widest">{l.layer}</span>
-                      <span className="text-[#999] text-xs">— {l.desc}</span>
-                    </div>
-                    <p className="text-sm text-[#666]">{l.detail}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <p className="text-center text-[#999] text-sm mt-6">
-              Each layer builds on the last. Start with the brain. Everything else compounds.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── How It Works ── */}
-      <section id="how-it-works" className="py-24 px-6 bg-gray-50">
-        <div className="max-w-[1080px] mx-auto">
-          <h2 className="reveal text-3xl font-semibold text-center mb-16 text-[#111]">
-            Three steps to <span className="text-[#10B981]">liftoff</span>
-          </h2>
-          <div className="reveal-stagger grid gap-8 md:grid-cols-3">
-            {[
-              { step: "01", title: "Configure", desc: "Answer 5 questions about your business, preferences, and tools." },
-              { step: "02", title: "Install", desc: "One command on your VPS. Everything deploys automatically." },
-              { step: "03", title: "Operate", desc: "Your first brief arrives at 8am your timezone. Pipeline is live." },
-            ].map((s, i) => (
-              <div key={s.step} className={`reveal text-center md:text-left ${i < 2 ? "step-line" : ""}`}>
-                <div className="text-[#10B981] font-mono text-sm mb-2">{s.step}</div>
-                <h3 className="text-xl font-semibold mb-2 text-[#111]">{s.title}</h3>
-                <p className="text-[#666] leading-relaxed">{s.desc}</p>
-              </div>
-            ))}
-          </div>
+      <section className="reveal border-y border-border">
+        <div className="max-w-[1080px] mx-auto px-6 py-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-sm text-text-muted">
+          <span><strong className="text-text-primary">3</strong> agents</span>
+          <span className="hidden sm:inline text-border">|</span>
+          <span><strong className="text-text-primary">14</strong> vetted skills</span>
+          <span className="hidden sm:inline text-border">|</span>
+          <span><strong className="text-text-primary">23</strong> pre-configured crons</span>
+          <span className="hidden sm:inline text-border">|</span>
+          <span><strong className="text-text-primary">5 min</strong> setup</span>
+          <span className="hidden sm:inline text-border">|</span>
+          <span><strong className="text-text-primary">$0</strong> hosting markup</span>
         </div>
       </section>
 
       {/* ── Your AI Team ── */}
       <section className="py-24 px-6">
         <div className="max-w-[1080px] mx-auto">
-          <h2 className="reveal text-3xl font-semibold text-center mb-16 text-[#111]">
-            Your AI Team
+          <h2 className="reveal text-3xl sm:text-4xl font-bold text-center mb-4">
+            Three agents. One system.
           </h2>
+          <p className="reveal text-text-secondary text-center mb-16 max-w-xl mx-auto">
+            Each agent has a role, a soul, and shared memory. They coordinate, hand off work, and get sharper every day.
+          </p>
           <div className="reveal-stagger grid gap-6 md:grid-cols-3">
             {agents.map((a) => (
-              <div key={a.name} className="reveal card-hover bg-white rounded-xl border border-gray-200 shadow-sm p-7">
-                <h3 className="text-xl font-semibold text-[#111]">{a.name}</h3>
-                <p className="text-[#666] text-sm mb-4">{a.role}</p>
-                <ul className="space-y-2.5">
-                  {a.bullets.map((b) => (
-                    <li key={b} className="flex items-start gap-2 text-sm text-[#444]">
-                      <span className="text-[#10B981] mt-0.5 shrink-0">→</span>
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
+              <div key={a.name} className="reveal card p-7">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-2 h-2 rounded-full" style={{ background: a.color }} />
+                  <h3 className="text-lg font-semibold text-text-primary">{a.name}</h3>
+                </div>
+                <p className="text-sm font-medium text-accent-light mb-2">{a.role}</p>
+                <p className="text-sm text-text-secondary leading-relaxed">{a.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Comparison Table ── */}
-      <section className="py-24 px-6 bg-gray-50">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="reveal text-3xl font-semibold text-center mb-16 text-[#111]">
-            Manual Setup <span className="text-[#999]">vs</span> <span className="text-[#10B981]">Clawd Up</span>
+      <div className="section-divider mx-6" />
+
+      {/* ── How It Works ── */}
+      <section id="how-it-works" className="py-24 px-6">
+        <div className="max-w-[1080px] mx-auto">
+          <h2 className="reveal text-3xl sm:text-4xl font-bold text-center mb-16">
+            From zero to <span className="gradient-text">pipeline</span> in 5 minutes
           </h2>
-          <div className="reveal overflow-x-auto bg-white rounded-xl border border-gray-200 shadow-sm">
+          <div className="reveal-stagger grid gap-12 md:grid-cols-3">
+            {[
+              {
+                step: "01",
+                title: "Configure",
+                desc: "Answer 5 questions about your business, niche, and preferred tools. Takes 2 minutes.",
+              },
+              {
+                step: "02",
+                title: "Install",
+                desc: "One command on your VPS. Agents deploy, crons start, memory initializes. Takes 3 minutes.",
+              },
+              {
+                step: "03",
+                title: "Operate",
+                desc: "Your first brief arrives at 8am. Scout is already scanning. Pipeline is live.",
+              },
+            ].map((s) => (
+              <div key={s.step} className="reveal text-center md:text-left">
+                <span className="text-accent font-mono text-sm font-bold">{s.step}</span>
+                <h3 className="text-xl font-semibold mt-2 mb-3 text-text-primary">{s.title}</h3>
+                <p className="text-text-secondary leading-relaxed text-sm">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="section-divider mx-6" />
+
+      {/* ── System Architecture ── */}
+      <section className="py-24 px-6">
+        <div className="max-w-[1080px] mx-auto">
+          <h2 className="reveal text-3xl sm:text-4xl font-bold text-center mb-4">
+            Not prompts. A system.
+          </h2>
+          <p className="reveal text-text-secondary text-center mb-16 max-w-xl mx-auto">
+            Five layers that compound. Every correction becomes a rule. Every session makes the system smarter.
+          </p>
+
+          <div className="reveal max-w-2xl mx-auto space-y-3">
+            {[
+              { layer: "BRAIN", desc: "SOUL.md + AGENTS.md + USER.md", detail: "Your agent knows who it is, who you are, and how to operate" },
+              { layer: "SKILLS", desc: "14 vetted, auto-loaded per task", detail: "Research, copywriting, strategy, pipeline — each with frameworks" },
+              { layer: "TOOLS", desc: "Web, browser, APIs, MCP servers", detail: "External data flows in automatically" },
+              { layer: "CONTEXT", desc: "Brand voice, priorities, vault", detail: "Corrections today become rules tomorrow" },
+              { layer: "AGENTS", desc: "Scout + Researcher + Operator", detail: "Specialists that coordinate and share memory" },
+            ].map((l, i) => (
+              <div key={l.layer} className="reveal card px-6 py-4" style={{ marginLeft: `${i * 24}px`, marginRight: `${(4 - i) * 24}px` }}>
+                <div className="flex items-center gap-3 mb-1">
+                  <span className="text-accent font-mono text-xs font-bold tracking-widest">{l.layer}</span>
+                  <span className="text-text-muted text-xs">— {l.desc}</span>
+                </div>
+                <p className="text-sm text-text-secondary">{l.detail}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="section-divider mx-6" />
+
+      {/* ── Comparison ── */}
+      <section className="py-24 px-6">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="reveal text-3xl sm:text-4xl font-bold text-center mb-16">
+            Manual setup <span className="text-text-muted">vs</span> <span className="gradient-text">Clawd Up</span>
+          </h2>
+          <div className="reveal overflow-x-auto card">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-5 text-[#666] font-medium"></th>
-                  <th className="text-left py-3 px-5 text-[#666] font-medium">Manual</th>
-                  <th className="text-left py-3 px-5 text-[#10B981] font-medium">Clawd Up</th>
+                <tr className="border-b border-border">
+                  <th className="text-left py-3.5 px-5 text-text-muted font-medium"></th>
+                  <th className="text-left py-3.5 px-5 text-text-muted font-medium">Manual</th>
+                  <th className="text-left py-3.5 px-5 text-accent font-medium">Clawd Up</th>
                 </tr>
               </thead>
               <tbody>
                 {comparisonRows.map((row, i) => (
-                  <tr key={row.item} className={i % 2 === 1 ? "bg-gray-50" : ""}>
-                    <td className="py-3.5 px-5 font-medium text-[#111]">{row.item}</td>
-                    <td className="py-3.5 px-5 text-[#666]">{row.manual}</td>
-                    <td className="py-3.5 px-5 text-[#10B981] font-medium">{row.clawdup}</td>
+                  <tr key={row.item} className={i < comparisonRows.length - 1 ? "border-b border-border" : ""}>
+                    <td className="py-3.5 px-5 font-medium text-text-primary">{row.item}</td>
+                    <td className="py-3.5 px-5 text-text-muted">{row.manual}</td>
+                    <td className="py-3.5 px-5 text-green font-medium">{row.us}</td>
                   </tr>
                 ))}
               </tbody>
@@ -320,81 +371,119 @@ export default function Landing({ onStart }: { onStart: () => void }) {
         </div>
       </section>
 
+      <div className="section-divider mx-6" />
+
       {/* ── Pricing ── */}
-      <section className="py-24 px-6">
-        <div className="max-w-[1080px] mx-auto">
-          <h2 className="reveal text-3xl font-semibold text-center mb-4 text-[#111]">
+      <section id="pricing" className="py-24 px-6">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="reveal text-3xl sm:text-4xl font-bold text-center mb-4">
             Simple pricing
           </h2>
-          <p className="reveal text-[#666] text-center mb-16 text-base">Buy once. Subscribe for weekly updates from our live system.</p>
-          <div className="reveal-stagger grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
-            {tiers.map((t) => (
-              <div
-                key={t.name}
-                className={`reveal card-hover bg-white rounded-xl p-7 text-left shadow-sm ${
-                  t.highlighted ? "border-t-2 border-t-[#10B981] border border-gray-200" : "border border-gray-200"
-                }`}
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <h3 className="text-xl font-semibold text-[#111]">{t.name}</h3>
-                  <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-                    t.highlighted ? "bg-emerald-50 text-[#10B981]" : "bg-gray-100 text-[#666]"
-                  }`}>
-                    {t.tag}
-                  </span>
-                </div>
-                <div className="mt-2 mb-5">
-                  <span className="text-3xl font-bold text-[#111]">{t.price}</span>
-                  <span className="text-[#666] text-sm">{t.period}</span>
-                </div>
-                <ul className="space-y-2.5">
-                  {t.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-[#444]">
-                      <span className="text-[#10B981] mt-0.5 shrink-0">✓</span>
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
+          <p className="reveal text-text-secondary text-center mb-16">
+            Buy once. Subscribe for weekly updates from our live system.
+          </p>
+          <div className="reveal-stagger grid gap-6 md:grid-cols-2">
+            {/* One-time */}
+            <div className="reveal card p-7 relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-accent" />
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="text-lg font-semibold text-text-primary">Clawd Up</h3>
+                <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-accent/10 text-accent-light">
+                  Full agent pack
+                </span>
               </div>
-            ))}
+              <div className="mt-3 mb-6">
+                <span className="text-4xl font-bold text-text-primary">$19</span>
+                <span className="text-text-muted text-sm ml-1">one-time</span>
+              </div>
+              <ul className="space-y-3">
+                {[
+                  "All 3 agents (Scout, Researcher, Operator)",
+                  "Pre-configured memory + boot sequence",
+                  "Curated skills — no bloat",
+                  "Cron jobs, templates, pipeline system",
+                  "Telegram or Discord briefs",
+                  "Own it forever",
+                ].map((f) => (
+                  <li key={f} className="flex items-start gap-2.5 text-sm text-text-secondary">
+                    <span className="text-green mt-0.5 shrink-0">&#10003;</span>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {/* Subscription */}
+            <div className="reveal card p-7">
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="text-lg font-semibold text-text-primary">Updates</h3>
+                <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-bg-tertiary text-text-muted">
+                  Stay sharp
+                </span>
+              </div>
+              <div className="mt-3 mb-6">
+                <span className="text-4xl font-bold text-text-primary">$9</span>
+                <span className="text-text-muted text-sm ml-1">/mo</span>
+              </div>
+              <ul className="space-y-3">
+                {[
+                  "Weekly config updates from our live system",
+                  "New agent SOULs as we improve them",
+                  "New skills, vetted and tested",
+                  "New signal sources + kill patterns",
+                  "Private GitHub repo access",
+                  "Cancel anytime — keep everything",
+                ].map((f) => (
+                  <li key={f} className="flex items-start gap-2.5 text-sm text-text-secondary">
+                    <span className="text-green mt-0.5 shrink-0">&#10003;</span>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="reveal text-center mt-10">
+            <button
+              onClick={onStart}
+              className="btn-primary px-10 py-4 text-lg cursor-pointer"
+            >
+              Get Clawd Up — $19 One-Time
+            </button>
+            <p className="text-text-muted text-xs mt-3">
+              Not happy? Full refund within 30 days. No questions.
+            </p>
           </div>
         </div>
       </section>
 
+      <div className="section-divider mx-6" />
+
       {/* ── FAQ ── */}
-      <section className="py-24 px-6">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="reveal text-3xl font-semibold text-center mb-16 text-[#111]">
-            Common questions
+      <section id="faq" className="py-24 px-6">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="reveal text-3xl sm:text-4xl font-bold text-center mb-16">
+            Questions
           </h2>
-          <div className="reveal space-y-6">
-            {[
-              { q: "What do I need to run this?", a: "A VPS (DigitalOcean $12/mo works great), Node.js 18+, an AI API key (Anthropic, OpenAI, or Google), and a Telegram bot or Discord webhook for notifications." },
-              { q: "Is this a SaaS or do I self-host?", a: "Self-hosted. You run it on your own server. Your data, your API keys, your agents. We never see your pipeline." },
-              { q: "What's the difference between the one-time purchase and the subscription?", a: "The $19 one-time gets you the full system as-is. The $9/mo subscription gives you weekly updates — new agent configurations, skills, and signal sources from our live production system." },
-              { q: "Can I cancel the updates subscription?", a: "Yes, anytime. You keep everything you've already received. The agents keep running — you just stop getting weekly updates." },
-              { q: "How much does the AI API cost?", a: "Depends on usage. Most users spend $30-80/mo on API calls. Scout and Researcher use Sonnet (cheap). Only the Operator uses Opus for complex decisions." },
-              { q: "What if I break something?", a: "The immune system catches drift and data quality issues. Agent configs are version-controlled. Worst case, re-run setup.js to reset." },
-            ].map((faq) => (
-              <div key={faq.q} className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-                <h3 className="font-semibold text-[#111] mb-2">{faq.q}</h3>
-                <p className="text-sm text-[#666] leading-relaxed">{faq.a}</p>
-              </div>
+          <div className="reveal space-y-3">
+            {faqs.map((faq) => (
+              <FaqItem key={faq.q} q={faq.q} a={faq.a} />
             ))}
           </div>
         </div>
       </section>
 
       {/* ── Final CTA ── */}
-      <section className="reveal py-24 px-6 bg-gray-50">
-        <div className="text-center max-w-2xl mx-auto">
-          <h2 className="text-3xl font-semibold mb-4 text-[#111]">
-            Ready to stop configuring<br />and start operating?
+      <section className="reveal py-24 px-6 hero-gradient relative">
+        <div className="text-center max-w-2xl mx-auto relative z-10">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+            Stop configuring.<br />
+            <span className="gradient-text">Start operating.</span>
           </h2>
-          <p className="text-[#666] text-lg mb-10">Five questions. One command. Your AI team is live.</p>
+          <p className="text-text-secondary text-lg mb-10">
+            Five questions. One command. Your AI team is live.
+          </p>
           <button
             onClick={onStart}
-            className="bg-[#10B981] text-white font-semibold px-10 py-4 rounded-lg text-lg hover:bg-[#059669] transition-colors cursor-pointer"
+            className="btn-primary px-10 py-4 text-lg cursor-pointer"
           >
             Get Started — $19 One-Time
           </button>
@@ -402,17 +491,17 @@ export default function Landing({ onStart }: { onStart: () => void }) {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-gray-200 py-10 px-6">
-        <div className="max-w-[1080px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-[#666]">
+      <footer className="border-t border-border py-10 px-6">
+        <div className="max-w-[1080px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-text-muted">
           <span>Built by solo founders, for solo founders.</span>
-          <a
-            href="https://github.com/Jmee67/clawd-up"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-[#111] transition-colors"
-          >
-            GitHub →
-          </a>
+          <div className="flex gap-6">
+            <a href="https://github.com/Jmee67/clawd-up" target="_blank" rel="noopener noreferrer" className="hover:text-text-primary transition-colors">
+              GitHub
+            </a>
+            <a href="https://x.com/Microbuilderco" target="_blank" rel="noopener noreferrer" className="hover:text-text-primary transition-colors">
+              @Microbuilderco
+            </a>
+          </div>
         </div>
       </footer>
     </div>

@@ -1,36 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Inter } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "Clawd Up — AI Business Ops in One Command",
-  description: "Deploy AI agents that scan for opportunities, research competitors, and manage your pipeline. Three agents. One install command. Pipeline running by morning.",
+  title: "Clawd Up — Your AI Agent. Your Server. Your Rules.",
+  description: "Self-hosted AI agents for solo founders. Three agents, one install command. Scout finds opportunities. Researcher validates them. Operator runs your pipeline. $19 one-time + $9/mo.",
   openGraph: {
-    title: "Clawd Up — AI Business Ops in One Command",
-    description: "Three agents. One install command. Pipeline running by morning. $19 one-time.",
+    title: "Clawd Up — Your AI Agent. Your Server. Your Rules.",
+    description: "Self-hosted AI agents for solo founders. Three agents. One install command. Pipeline running by morning.",
     type: "website",
     url: "https://clawd-up.vercel.app",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Clawd Up — AI Business Ops in One Command",
-    description: "Three agents. One install command. Pipeline running by morning. $19 one-time.",
+    title: "Clawd Up — Your AI Agent. Your Server. Your Rules.",
+    description: "Self-hosted AI agents for solo founders. Three agents. One install command. $19 one-time.",
   },
 };
 
@@ -41,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}>
+      <body className="antialiased">
         {children}
       </body>
     </html>
