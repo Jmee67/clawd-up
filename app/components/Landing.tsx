@@ -46,7 +46,7 @@ const faqs = [
   },
   {
     q: "What's the $9/mo subscription for?",
-    a: "Weekly updates from our production system — new agent configs, skills, signal sources, and kill patterns. Cancel anytime. You keep everything.",
+    a: "Weekly updates from our production system. New agent configs, skills, signal sources, and kill patterns. Cancel anytime. You keep everything.",
   },
   {
     q: "How much does the AI API cost to run?",
@@ -222,7 +222,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
               onClick={onStart}
               className="btn-primary px-8 py-3.5 text-lg cursor-pointer"
             >
-              Get Clawd Up — $15
+              Get Clawd Up · $15
             </button>
             <Link
               href="/demo"
@@ -327,7 +327,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
           <div className="reveal max-w-2xl mx-auto space-y-3">
             {[
               { layer: "BRAIN", desc: "SOUL.md + AGENTS.md + USER.md", detail: "Your agent knows who it is, who you are, and how to operate" },
-              { layer: "SKILLS", desc: "14 vetted, auto-loaded per task", detail: "Research, copywriting, strategy, pipeline — each with frameworks" },
+              { layer: "SKILLS", desc: "14 vetted, auto-loaded per task", detail: "Research, copywriting, strategy, pipeline, each with frameworks" },
               { layer: "TOOLS", desc: "Web, browser, APIs, MCP servers", detail: "External data flows in automatically" },
               { layer: "CONTEXT", desc: "Brand voice, priorities, vault", detail: "Corrections today become rules tomorrow" },
               { layer: "AGENTS", desc: "Scout + Researcher + Operator", detail: "Specialists that coordinate and share memory" },
@@ -335,7 +335,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
               <div key={l.layer} className="reveal card px-6 py-4" style={{ marginLeft: `${i * 24}px`, marginRight: `${(4 - i) * 24}px` }}>
                 <div className="flex items-center gap-3 mb-1">
                   <span className="text-accent font-mono text-xs font-bold tracking-widest">{l.layer}</span>
-                  <span className="text-text-muted text-xs">— {l.desc}</span>
+                  <span className="text-text-muted text-xs">· {l.desc}</span>
                 </div>
                 <p className="text-sm text-text-secondary">{l.detail}</p>
               </div>
@@ -404,7 +404,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
                 {[
                   "All 3 agents (Scout, Researcher, Operator)",
                   "Pre-configured memory + boot sequence",
-                  "Curated skills — no bloat",
+                  "Curated skills, no bloat",
                   "Cron jobs, templates, pipeline system",
                   "Telegram or Discord briefs",
                   "Own it forever",
@@ -435,7 +435,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
                   "New skills, vetted and tested",
                   "New signal sources + kill patterns",
                   "Private GitHub repo access",
-                  "Cancel anytime — keep everything",
+                  "Cancel anytime. Keep everything",
                 ].map((f) => (
                   <li key={f} className="flex items-start gap-2.5 text-sm text-text-secondary">
                     <span className="text-green mt-0.5 shrink-0">&#10003;</span>
@@ -450,7 +450,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
               onClick={onStart}
               className="btn-primary px-10 py-4 text-lg cursor-pointer"
             >
-              Get Clawd Up — $15 One-Time
+              Get Clawd Up · $15 One-Time
             </button>
             <p className="text-text-muted text-xs mt-3">
               Not happy? Full refund within 30 days. No questions.
@@ -468,14 +468,14 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             What your <span className="gradient-text">$9/mo</span> unlocks
           </h2>
           <p className="reveal text-text-secondary text-center mb-16 max-w-xl mx-auto">
-            Your subscription isn't maintenance. It's a feed from our live production system — every improvement we make, you get.
+            Your subscription isn't maintenance. It's a feed from our live production system. Every improvement we make, you get.
           </p>
           <div className="reveal-stagger grid gap-4 md:grid-cols-2">
             {[
               {
                 label: "Now",
                 items: [
-                  "Weekly config drops — improved SOULs, new kill patterns",
+                  "Weekly config drops. Improved SOULs, new kill patterns",
                   "Model update patches when Claude/GPT changes break prompts",
                   "New signal sources as we discover them",
                 ],
@@ -483,25 +483,25 @@ export default function Landing({ onStart }: { onStart: () => void }) {
               {
                 label: "Q2 2026",
                 items: [
-                  "Dashboard UI — visual pipeline, signal feed, brief history",
-                  "Niche playbooks — pre-built configs for SaaS, e-commerce, agency",
-                  "Slack & Discord briefs — not just Telegram",
+                  "Dashboard UI. Visual pipeline, signal feed, brief history",
+                  "Niche playbooks. Pre-built configs for SaaS, e-commerce, agency",
+                  "Slack & Discord briefs, not just Telegram",
                 ],
               },
               {
                 label: "Q3 2026",
                 items: [
-                  "Custom agent builder — define your own specialists",
-                  "Community kill patterns — crowdsourced from all users",
-                  "Local AI fallback — Ollama for cheaper scanning",
+                  "Custom agent builder. Define your own specialists",
+                  "Community kill patterns. Crowdsourced from all users",
+                  "Local AI fallback. Ollama for cheaper scanning",
                 ],
               },
               {
                 label: "Q4 2026",
                 items: [
-                  "Multi-agent marketplace — plug in community-built agents",
-                  "Revenue tracking integration — connect Stripe/LemonSqueezy",
-                  "Auto-validation — agents test landing pages and run ads",
+                  "Multi-agent marketplace. Plug in community-built agents",
+                  "Revenue tracking. Connect Stripe/LemonSqueezy",
+                  "Auto-validation. Agents test landing pages and run ads",
                 ],
               },
             ].map((phase) => (
@@ -551,7 +551,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             onClick={onStart}
             className="btn-primary px-10 py-4 text-lg cursor-pointer"
           >
-            Get Started — $15 One-Time
+            Get Started · $15 One-Time
           </button>
         </div>
       </section>
