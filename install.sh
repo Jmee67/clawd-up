@@ -124,32 +124,6 @@ if [ $SETUP_EXIT -ne 0 ]; then
   exit 1
 fi
 
-# ── Register cron jobs ───────────────────────────────────
-
-CRON_DIR="${OPENCLAW_WORKSPACE}/crons"
-if [ -d "$CRON_DIR" ] && ls "$CRON_DIR"/*.json &>/dev/null 2>&1; then
-  echo ""
-  info "Registering cron jobs..."
-  REGISTERED=0
-  FAILED=0
-  for cron_file in "$CRON_DIR"/*.json; do
-    CRON_NAME=$(basename "$cron_file" .json)
-    if openclaw cron create --file "$cron_file" 2>/dev/null; then
-      REGISTERED=$((REGISTERED + 1))
-    else
-      # Try update if create fails (already exists)
-      if openclaw cron update --file "$cron_file" 2>/dev/null; then
-        REGISTERED=$((REGISTERED + 1))
-      else
-        warn "Could not register cron: $CRON_NAME"
-        FAILED=$((FAILED + 1))
-      fi
-    fi
-  done
-  info "Registered $REGISTERED cron job(s)"
-  [ $FAILED -gt 0 ] && warn "$FAILED cron(s) failed — register manually with: openclaw cron create --file <path>"
-fi
-
 # ── Start gateway if needed ──────────────────────────────
 
 if [ "${START_GATEWAY:-false}" = "true" ]; then
@@ -158,16 +132,39 @@ if [ "${START_GATEWAY:-false}" = "true" ]; then
   openclaw gateway start 2>/dev/null || warn "Could not start gateway. Run: openclaw gateway start"
 fi
 
-# ── Send test notification ───────────────────────────────
+# ── Register cron jobs via gateway API ───────────────────
+
+CRON_DIR="${OPENCLAW_WORKSPACE}/crons"
+if [ -d "$CRON_DIR" ] && ls "$CRON_DIR"/*.json &>/dev/null 2>&1; then
+  echo ""
+  info "Registering cron jobs..."
+  node "${SCRIPT_DIR}/scripts/register-crons.js" || {
+    warn "Some crons may not have registered. You can re-run later:"
+    echo "    node ${SCRIPT_DIR}/scripts/register-crons.js"
+  }
+fi
+
+# ── Verify installation ─────────────────────────────────
 
 echo ""
-echo -e "${BOLD}  Testing notification delivery...${NC}"
+echo -e "${BOLD}  Verifying installation...${NC}"
+echo ""
 
-# Check if we can send a test message via openclaw
-if openclaw notify --message "🦞 Clawd Up installed! Your AI ops team is online." 2>/dev/null; then
-  info "Test notification sent"
+# Check agent files exist
+for agent_dir in scout researcher operator; do
+  AGENT_PATH="${OPENCLAW_WORKSPACE}/${agent_dir}"
+  if [ -d "$AGENT_PATH" ] || [ -f "${OPENCLAW_WORKSPACE}/SOUL.md" ]; then
+    info "Agent files: ${agent_dir}"
+  else
+    warn "Missing agent files for: ${agent_dir}"
+  fi
+done
+
+# Check memory scaffold
+if [ -d "${OPENCLAW_WORKSPACE}/memory" ]; then
+  info "Memory scaffold created"
 else
-  warn "Could not send test notification. Check your channel config in OpenClaw settings."
+  warn "Memory directory missing"
 fi
 
 # ── Done ─────────────────────────────────────────────────

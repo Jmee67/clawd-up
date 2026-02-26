@@ -81,16 +81,16 @@ No external dependencies required.
     name = cfg.name;
     timezone = cfg.timezone || 'UTC';
     channel = cfg.channel || 'telegram';
-    chat_id = cfg.chat_id || '';
-    bot_token = cfg.bot_token || '';
-    webhook_url = cfg.webhook_url || '';
-    work_style = cfg.work_style || 'direct';
+    chat_id = cfg.chat_id || cfg.telegram_chat_id || '';
+    bot_token = cfg.bot_token || cfg.telegram_token || '';
+    webhook_url = cfg.webhook_url || cfg.discord_webhook || '';
+    work_style = cfg.work_style || cfg.comm_style || 'direct';
     annoyances = cfg.annoyances || '';
-    work_context = cfg.work_context || '';
+    work_context = cfg.work_context || cfg.role || '';
     priorities = cfg.priorities || '';
     provider = cfg.provider || 'anthropic';
     api_key = cfg.api_key || '';
-    tier = cfg.tier || 'free';
+    tier = cfg.tier || 'starter';
     license_key = cfg.license_key || '';
     licenseValid = false;
 
@@ -157,7 +157,8 @@ No external dependencies required.
     rl.close();
   }
 
-    const effectiveTier = (tier === 'free' || (!license_key && tier !== 'free')) ? 'free' : tier;
+    // Skip license validation for now — everyone gets their selected tier
+    const effectiveTier = tier || 'starter';
     const tierDef = getTier(effectiveTier);
 
     // Resolve models
@@ -313,7 +314,6 @@ No external dependencies required.
   `);
 
   } catch (err) {
-    rl.close();
     console.error('  Error:', err.message);
     process.exit(1);
   }
