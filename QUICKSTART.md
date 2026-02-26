@@ -45,6 +45,30 @@ cat ~/.openclaw/workspace/PIPELINE.md
 openclaw cron list
 ```
 
+## Your First 24 Hours
+
+Here's what to expect after install:
+
+**Hour 0-1:** Setup completes. Agents boot up. You get a test notification.
+
+**8am (your timezone):** First morning brief arrives. It covers:
+- New demand signals found overnight (Reddit, X, HN)
+- Pipeline status (if you have opportunities already)
+- Suggested actions for the day
+
+**Throughout the day:** Scout runs on schedule, scanning for pain points and demand signals in your configured niches. Signals appear in your pipeline as NEW.
+
+**11pm:** Nightly build session runs. Operator reviews the pipeline, scores opportunities, and advances anything that has enough evidence.
+
+**Day 2+:** The system compounds. More signals, sharper triage, deeper research on promising opportunities. You review, make decisions, and build.
+
+### What to do
+
+1. **Read the morning brief.** It's your daily dashboard.
+2. **Check PIPELINE.md** when you want to see what's in play.
+3. **Kill bad ideas fast.** The system learns from kills.
+4. **Let it run.** The agents get better with context over time.
+
 ## Troubleshooting
 
 - **OpenClaw not found?** Make sure `~/.openclaw/bin` is in your PATH. Run `source ~/.bashrc` or restart your shell.
