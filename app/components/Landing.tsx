@@ -222,7 +222,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
               onClick={onStart}
               className="btn-primary px-8 py-3.5 text-lg cursor-pointer"
             >
-              Get Clawd Up — $19
+              Get Clawd Up — $15
             </button>
             <Link
               href="/demo"
@@ -397,7 +397,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
                 </span>
               </div>
               <div className="mt-3 mb-6">
-                <span className="text-4xl font-bold text-text-primary">$19</span>
+                <span className="text-4xl font-bold text-text-primary">$15</span>
                 <span className="text-text-muted text-sm ml-1">one-time</span>
               </div>
               <ul className="space-y-3">
@@ -450,11 +450,73 @@ export default function Landing({ onStart }: { onStart: () => void }) {
               onClick={onStart}
               className="btn-primary px-10 py-4 text-lg cursor-pointer"
             >
-              Get Clawd Up — $19 One-Time
+              Get Clawd Up — $15 One-Time
             </button>
             <p className="text-text-muted text-xs mt-3">
               Not happy? Full refund within 30 days. No questions.
             </p>
+          </div>
+        </div>
+      </section>
+
+      <div className="section-divider mx-6" />
+
+      {/* ── Roadmap ── */}
+      <section className="py-24 px-6">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="reveal text-3xl sm:text-4xl font-bold text-center mb-4">
+            What your <span className="gradient-text">$9/mo</span> unlocks
+          </h2>
+          <p className="reveal text-text-secondary text-center mb-16 max-w-xl mx-auto">
+            Your subscription isn't maintenance. It's a feed from our live production system — every improvement we make, you get.
+          </p>
+          <div className="reveal-stagger grid gap-4 md:grid-cols-2">
+            {[
+              {
+                label: "Now",
+                items: [
+                  "Weekly config drops — improved SOULs, new kill patterns",
+                  "Model update patches when Claude/GPT changes break prompts",
+                  "New signal sources as we discover them",
+                ],
+              },
+              {
+                label: "Q2 2026",
+                items: [
+                  "Dashboard UI — visual pipeline, signal feed, brief history",
+                  "Niche playbooks — pre-built configs for SaaS, e-commerce, agency",
+                  "Slack & Discord briefs — not just Telegram",
+                ],
+              },
+              {
+                label: "Q3 2026",
+                items: [
+                  "Custom agent builder — define your own specialists",
+                  "Community kill patterns — crowdsourced from all users",
+                  "Local AI fallback — Ollama for cheaper scanning",
+                ],
+              },
+              {
+                label: "Q4 2026",
+                items: [
+                  "Multi-agent marketplace — plug in community-built agents",
+                  "Revenue tracking integration — connect Stripe/LemonSqueezy",
+                  "Auto-validation — agents test landing pages and run ads",
+                ],
+              },
+            ].map((phase) => (
+              <div key={phase.label} className="reveal card p-6">
+                <span className="text-xs font-bold text-accent-light tracking-wider uppercase">{phase.label}</span>
+                <ul className="mt-3 space-y-2">
+                  {phase.items.map((item) => (
+                    <li key={item} className="flex items-start gap-2.5 text-sm text-text-secondary">
+                      <span className="text-green mt-0.5 shrink-0">&#10003;</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -489,7 +551,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             onClick={onStart}
             className="btn-primary px-10 py-4 text-lg cursor-pointer"
           >
-            Get Started — $19 One-Time
+            Get Started — $15 One-Time
           </button>
         </div>
       </section>
