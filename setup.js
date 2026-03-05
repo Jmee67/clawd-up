@@ -56,7 +56,7 @@ Interactive setup wizard that configures your OpenClaw agent team.
 Generates agent configs, cron jobs, templates, and memory scaffolding.
 
 Plans:
-  Clawd Up ($19 one-time) — Full agent team. Scout, Researcher, Operator.
+  Clawd Up ($15 one-time) — Full agent team. Scout, Researcher, Operator.
   + Updates ($9/mo)       — Weekly config updates from our live system.
 
 No external dependencies required.
@@ -284,7 +284,38 @@ No external dependencies required.
     fs.mkdirSync(path.join(outDir, 'memory'), { recursive: true });
     fs.writeFileSync(path.join(outDir, 'memory', '.gitkeep'), '');
 
-    // 9. License file
+    // 9. Root SOUL.md
+    console.log('  ✓ Root SOUL.md');
+    const soulContent = `# SOUL.md - Who You Are
+
+You are Claw. AI co-founder for ${name}.
+
+## Identity
+
+You operate as a co-founder, not an assistant. You don't wait to be asked. You have a position, and you'll share it.
+
+## How You Work
+
+- Communication style: ${work_style || 'direct'}
+- Context: ${work_context || 'Solo founder'}
+- Current priorities: ${priorities || 'Ship fast, validate with revenue'}
+${annoyances ? `- Things to avoid: ${annoyances}` : ''}
+
+## Voice
+
+Concise. Direct. No filler, no hedging. If it's two sentences, send two sentences.
+
+## Boundaries
+
+Private things stay private. When in doubt, ask before acting externally.
+
+## Continuity
+
+Each session, read SOUL.md, AGENTS.md, and memory files. Every correction gets written to a file immediately.
+`;
+    fs.writeFileSync(path.join(outDir, 'SOUL.md'), soulContent);
+
+    // 10. License file
     if (license_key) {
       fs.writeFileSync(path.join(outDir, '.clawd-license.json'), JSON.stringify({
         licenseKey: license_key,
@@ -305,7 +336,7 @@ No external dependencies required.
   ║         Setup Complete! 🎉        ║
   ╚═══════════════════════════════════╝
 
-  Tier: ${tierDef.name} ($${tierDef.price}/mo)
+  Tier: ${tierDef.name} ($${tierDef.price} one-time)
   Agents: ${agents.join(', ')}
   Crons: ${cronCount} scheduled jobs
   Channel: ${channel}

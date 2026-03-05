@@ -10,7 +10,7 @@ const path = require('path');
 const TIERS = {
   starter: {
     name: 'Clawd Up',
-    price: 19,
+    price: 15,
     priceModel: 'one-time',
     agents: ['scout', 'researcher', 'operator'],
     crons: ['all'],
@@ -22,7 +22,7 @@ const TIERS = {
   },
   pro: {
     name: 'Clawd Up + Updates',
-    price: 19,
+    price: 15,
     subscriptionPrice: 9,
     priceModel: 'one-time-plus-subscription',
     agents: ['scout', 'researcher', 'operator'],
@@ -150,7 +150,7 @@ async function main() {
   if (action === 'info') {
     console.log('Clawd Up Tiers:\n');
     for (const [key, tier] of Object.entries(TIERS)) {
-      console.log(`  ${tier.name} ($${tier.price}/mo)`);
+      console.log(`  ${tier.name} ($${tier.price} one-time)`);
       console.log(`    Agents: ${tier.agents.join(', ')}`);
       console.log(`    Features: ${tier.features.join(', ')}`);
       console.log(`    Signals/day: ${tier.maxSignalsPerDay === -1 ? 'unlimited' : tier.maxSignalsPerDay}`);
