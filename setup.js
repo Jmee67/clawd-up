@@ -96,7 +96,13 @@ No external dependencies required.
 
     console.log(`  Using config from web onboarding for ${name}`);
   } else {
-    // Interactive wizard
+    // Interactive wizard — requires a TTY
+    if (!process.stdin.isTTY) {
+      console.log('\n  Error: Setup requires an interactive terminal.');
+      console.log('  Run this command directly in your terminal (not piped).\n');
+      process.exit(1);
+    }
+
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
     name = await ask(rl, '  What\'s your name?', '');

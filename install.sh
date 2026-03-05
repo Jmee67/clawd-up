@@ -150,13 +150,17 @@ echo ""
 echo -e "${BOLD}  Verifying installation...${NC}"
 echo ""
 
-# Check agent files exist
+# Check agent files exist — at least scout must be present
+INSTALL_OK=true
 for agent_dir in scout researcher operator; do
   AGENT_PATH="${OPENCLAW_WORKSPACE}/${agent_dir}"
   if [ -d "$AGENT_PATH" ] || [ -f "${OPENCLAW_WORKSPACE}/SOUL.md" ]; then
     info "Agent files: ${agent_dir}"
   else
     warn "Missing agent files for: ${agent_dir}"
+    if [ "$agent_dir" = "scout" ]; then
+      INSTALL_OK=false
+    fi
   fi
 done
 
@@ -165,6 +169,16 @@ if [ -d "${OPENCLAW_WORKSPACE}/memory" ]; then
   info "Memory scaffold created"
 else
   warn "Memory directory missing"
+  INSTALL_OK=false
+fi
+
+if [ "$INSTALL_OK" = false ]; then
+  echo ""
+  error "Installation incomplete — setup wizard may not have finished."
+  echo "  Re-run the installer: bash /tmp/install.sh"
+  echo "  Or run setup manually: node ~/.openclaw/clawdup/setup.js"
+  echo "  Problems? Email info@microbuilder.co"
+  exit 1
 fi
 
 # ── Done ─────────────────────────────────────────────────
