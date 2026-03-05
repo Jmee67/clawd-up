@@ -46,12 +46,12 @@ else
   read -p "  Install OpenClaw now? [Y/n] " -n 1 -r
   echo ""
   if [[ $REPLY =~ ^[Nn]$ ]]; then
-    error "OpenClaw is required. Install it manually: curl -fsSL https://get.openclaw.ai | bash"
+    error "OpenClaw is required. Install it manually: curl -fsSL https://openclaw.ai/install.sh | bash"
     exit 1
   fi
   echo ""
   info "Installing OpenClaw..."
-  curl -fsSL https://get.openclaw.ai | bash
+  curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash
   
   # Source PATH updates
   export PATH="$HOME/.openclaw/bin:$PATH"
