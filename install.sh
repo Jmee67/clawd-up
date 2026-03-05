@@ -153,7 +153,7 @@ echo ""
 # Check agent files exist — at least scout must be present
 INSTALL_OK=true
 for agent_dir in scout researcher operator; do
-  AGENT_PATH="${OPENCLAW_WORKSPACE}/${agent_dir}"
+  AGENT_PATH="${OPENCLAW_WORKSPACE}/agents/${agent_dir}"
   if [ -d "$AGENT_PATH" ] || [ -f "${OPENCLAW_WORKSPACE}/SOUL.md" ]; then
     info "Agent files: ${agent_dir}"
   else
