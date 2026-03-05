@@ -1,0 +1,11 @@
+{
+  "name": "morning-brief",
+  "description": "Daily morning brief: pipeline status, overnight signals, recommendations",
+  "schedule": "0 8 * * *",
+  "timezone": "{{TIMEZONE}}",
+  "agent": "operator",
+  "prompt": "Run the morning brief. Summarize pipeline status, overnight signal activity, and top recommendations. Check memory for recent context. Deliver a concise summary to the configured channel.",
+  "timeoutSeconds": 300,
+  "channel": "telegram",
+  "chat_id": "{{CHAT_ID}}"
+}

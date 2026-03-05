@@ -1,0 +1,9 @@
+{
+  "name": "signal-scan",
+  "description": "Scan Reddit, X, and HN for demand signals every 6 hours",
+  "schedule": "0 */6 * * *",
+  "timezone": "{{TIMEZONE}}",
+  "agent": "scout",
+  "prompt": "Run a signal scan across Reddit, X/Twitter, and Hacker News. Look for demand signals: people complaining about existing tools, asking for solutions, or describing pain points with money attached. Apply your 3-filter system (pain, wallet, timing). Report findings organized by Hot Opportunities, AI/Tech Updates, and Patterns. If nothing noteworthy, say so.",
+  "timeoutSeconds": 600
+}

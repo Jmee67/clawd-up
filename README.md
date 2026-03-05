@@ -1,123 +1,82 @@
 # Clawd Up
 
-AI business ops team that finds, evaluates, and prioritizes startup opportunities while you build. Powered by [OpenClaw](https://github.com/openclaw/openclaw).
+A multi-agent system for solo founders. Three AI agents (Scout, Researcher, Operator) work together to find opportunities, validate them, and manage your pipeline — on autopilot. Built on [OpenClaw](https://openclaw.ai).
 
-## What It Does
+## What You Get
 
-Clawd Up runs three specialized AI agents that work together as your ops layer:
+- **Scout agent** — Scans Reddit, X, and HN for demand signals. Filters for real pain with wallets attached, not just interesting trends.
+- **Researcher agent** — Runs 5S deep dives (Signal, Size, Shape, Speed, Stress Test) on promising opportunities. Finds reasons NOT to build.
+- **Operator agent** — Your central coordinator. Morning briefs, signal triage, pipeline management, nightly builds.
+- **Cron system** — 5 pre-configured automated jobs: morning brief, signal scanning, triage, system review, nightly build.
+- **Pipeline** — Track opportunities from raw signal → validation → build decision. Scoring rubric included.
+- **Memory system** — Working memory, daily notes, and a permanent vault. Your agents get smarter over time through the correction loop.
 
-- **Scout** scans X/Twitter and Reddit for demand signals — real pain points where people are spending money on inferior solutions. Not trend-watching. Demand detection.
-- **Researcher** writes rigorous 5S deep dives (Signal, Size, Shape, Speed, Stress Test) on opportunities. Designed to find reasons NOT to build, so the ones that survive are worth your time.
-- **Operator** runs the pipeline. Morning briefs, signal triage, nightly builds, agent coordination. Kills stale opportunities, enforces stage gates, keeps everything moving.
+## Requirements
 
-Each agent has a research-backed expert identity — not a generic "you are a helpful assistant" prompt, but a detailed professional background that produces measurably better output (based on [ExpertPrompting research](https://arxiv.org/abs/2305.14688)).
-
-## Pricing
-
-### Clawd Up — $19 one-time
-Buy once, own it forever. You get the full agent team:
-- All 3 agents (Scout, Researcher, Operator)
-- Pre-configured memory, boot sequence, handover protocol
-- Curated skills — 28% leaner than default OpenClaw
-- All cron jobs, templates, and pipeline system
-- Immune system, nightly builds, signal triage
-- Telegram or Discord notifications
-
-### Weekly Updates — +$9/mo (optional)
-Stay current with our live system:
-- Weekly config updates pushed to a private GitHub repo
-- New agent SOULs as we improve them
-- New skills, vetted and tested on our own system
-- New signal sources and kill patterns
-- Cancel anytime
-
-## Quick Start
-
-**Requirements:**
-- [OpenClaw](https://github.com/openclaw/openclaw) installed and running
 - Node.js 18+
-- API key for Anthropic, OpenAI, or Google
-- Telegram bot token or Discord webhook for notifications
+- [OpenClaw](https://openclaw.ai) installed
+- An Anthropic API key (set in OpenClaw config)
 
-**Install:**
+## Installation
+
 ```bash
-git clone https://github.com/Jmee67/clawd-up.git
-cd clawd-up
-node setup.js
+curl -fsSL https://raw.githubusercontent.com/Jmee67/clawd-up/main/install.sh | bash
 ```
 
-The setup wizard asks for:
-1. Your name and timezone
-2. Model provider and API key
-3. Notification channel (Telegram/Discord)
-4. Your plan (Clawd Up / Clawd Up + Updates)
+Or clone and run manually:
 
-Setup copies agent configs, cron schedules, and templates into your OpenClaw workspace. Agents start on the next heartbeat.
-
-## How It Works
-
-```
-X/Twitter ──→ Scout ──→ Demand Signals ──→ Pipeline
-Reddit   ──↗                                  │
-                                               ▼
-                              Researcher ──→ 5S Deep Dive
-                                               │
-                                               ▼
-                              Operator ──→ Score/Kill/Build
-                                               │
-                                               ▼
-                                         Daily Brief → You
+```bash
+git clone https://github.com/Jmee67/clawd-up.git ~/.openclaw/clawdup
+cd ~/.openclaw/clawdup
+bash install.sh
 ```
 
-**Signal → Research → Decision → Build.** Each stage has gates. No opportunity advances without evidence. Stale items get killed automatically.
+## Customization
 
-## Agent Architecture
+### Edit your profile
 
-Each agent ships with:
-- **SOUL.md** — Deep expert identity (not generic role labels). Scout thinks like a demand signal analyst. Researcher thinks like a due diligence lead. Operator thinks like a COO.
-- **HEARTBEAT.md** — Scheduled tasks and monitoring duties
-- **TOOLS.md** — Agent-specific tool configuration
+Copy `templates/USER.md.template` to your workspace as `USER.md`. Replace `{{YOUR_NAME}}` and `{{YOUR_TIMEZONE}}` with your details. Add your context and working style.
 
-The Operator uses a delegation protocol for sub-agent spawning:
-- Context is passed inline (no large file reads)
-- Model is matched to task complexity (Sonnet for research, Opus for code)
-- Every sub-agent returns a structured completion signal
-- Stalled agents get steered before killed (preserves partial work)
+### Customize agent personalities
 
-## Immune System (Pro)
+Each agent has a `SOUL.md` in `agents/`. Edit these to change how your agents think, what they prioritize, and what they refuse to do. The "Never Do This" lists are the most valuable part — add your own corrections as you work with them.
 
-Quality checks that run automatically:
-- **Validator** — signal files and deep dives have required fields
-- **Pipeline Guard** — stage transitions follow gates (deep dive required before scoring)
-- **Drift Detector** — flags agents with no output or calibration issues
-- **Cost Monitor** — tracks token usage per agent, alerts on budget overruns
+### Change cron schedules
 
-## Supported Models
+Edit the JSON files in `crons/`. Each has a `schedule` (cron expression) and `timezone` field. See `crons/README.md` for details.
 
-| Agent | Anthropic | OpenAI | Google |
-|-------|-----------|--------|--------|
-| Scout | Claude Sonnet | GPT-4o-mini | Gemini Flash |
-| Researcher | Claude Sonnet | GPT-4o | Gemini Pro |
-| Operator | Claude Opus | GPT-4o | Gemini Pro |
+### Add new crons
 
-## Project Structure
+Create a new JSON file in `crons/` following the existing format, then run:
+
+```bash
+node scripts/register-crons.js
+```
+
+## File Structure
 
 ```
 clawd-up/
-├── setup.js              # Interactive setup wizard
+├── install.sh              # Installer (OpenClaw check, setup wizard, cron registration)
+├── setup.js                # Interactive setup wizard
 ├── agents/
-│   ├── scout/            # Signal scanning agent
-│   ├── researcher/       # Deep dive analysis agent
-│   └── operator/         # Pipeline management agent
-├── crons/                # Cron job templates (signal scans, briefs, triage)
-├── immune-system/        # Quality & drift detection checks
-├── scripts/
-│   ├── model-map.js      # Multi-provider model mapping
-│   └── license.js        # Tier & license validation
-├── templates/            # Pipeline, rubric, memory templates
-└── skills/               # Shared skill definitions
+│   ├── scout/SOUL.md       # Scout personality and instructions
+│   ├── researcher/SOUL.md  # Researcher personality and instructions
+│   └── operator/SOUL.md    # Operator personality and instructions
+├── templates/
+│   ├── AGENTS.md           # Workspace rules (correction loop, memory, safety)
+│   ├── HEARTBEAT.md        # Heartbeat priority order and nightly build guide
+│   ├── PIPELINE.md         # Pipeline stages and tracking template
+│   ├── RUBRIC.md           # Opportunity scoring rubric (5 dimensions, /25)
+│   ├── USER.md.template    # Your profile (fill in and rename)
+│   └── MEMORY.md.template  # Working memory scaffold
+├── crons/                  # Automated job configs (see crons/README.md)
+├── memory/vault/           # Permanent knowledge store
+└── scripts/
+    ├── register-crons.js   # Register crons with OpenClaw gateway
+    └── license.js          # License validation
 ```
 
-## License
+## Support
 
-MIT
+Questions or issues: [GitHub Issues](https://github.com/Jmee67/clawd-up/issues)

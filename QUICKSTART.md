@@ -1,52 +1,70 @@
-# Clawd Up — Quickstart
+# Quick Start — First 10 Minutes
 
-Everything you need in 4 commands.
-
-## Prerequisites
-
-- A VPS (DigitalOcean $12/mo droplet recommended — Ubuntu 22.04+)
-- A Telegram bot token ([create one here](https://t.me/BotFather))
-- An API key from Anthropic, OpenAI, or Google
-
-## Install
+## 1. Install
 
 ```bash
-# 1. Install OpenClaw
-curl -fsSL https://get.openclaw.ai | bash
-
-# 2. Clone Clawd Up
-git clone https://github.com/Jmee67/clawd-up.git
-cd clawd-up
-
-# 3. Run the installer (interactive wizard + full setup)
-bash install.sh
+curl -fsSL https://raw.githubusercontent.com/Jmee67/clawd-up/main/install.sh | bash
 ```
 
-That's it. Your first daily brief arrives at 8am your timezone.
+The installer checks for Node.js and OpenClaw, runs the setup wizard, and registers your cron jobs.
 
-## What Happens
-
-The installer will:
-1. Ask you some questions (name, timezone, API key, Telegram bot, what you're working on)
-2. Set up your AI agent team (Scout finds opportunities, Researcher validates them, Operator runs the pipeline)
-3. Register cron jobs so everything runs automatically
-4. Send a test message to confirm notifications work
-
-## After Install
+## 2. Edit your profile
 
 ```bash
-# Check agent status
+cp templates/USER.md.template ~/.openclaw/workspace/USER.md
+```
+
+Open `USER.md` and fill in:
+- Your name (replaces `{{YOUR_NAME}}` across agent files)
+- Your timezone (e.g., `Europe/London`, `America/New_York`)
+- What you're building and looking for
+- How you prefer to work with your agents
+
+## 3. Set your timezone in crons
+
+Open each file in `crons/` and replace `{{TIMEZONE}}` with your IANA timezone. Then re-register:
+
+```bash
+node scripts/register-crons.js
+```
+
+## 4. Start OpenClaw
+
+```bash
+openclaw gateway start
+```
+
+Check it's running:
+
+```bash
 openclaw gateway status
-
-# View your pipeline
-cat ~/.openclaw/workspace/PIPELINE.md
-
-# Check cron jobs
-openclaw cron list
 ```
 
-## Troubleshooting
+## 5. Wait for your first brief
 
-- **OpenClaw not found?** Make sure `~/.openclaw/bin` is in your PATH. Run `source ~/.bashrc` or restart your shell.
-- **No test message?** Double-check your Telegram bot token and chat ID. You can get your chat ID by messaging [@userinfobot](https://t.me/userinfobot).
-- **Node.js too old?** You need Node 18+. Install with `curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - && sudo apt-get install -y nodejs`
+Your morning brief cron fires at 8am in your timezone. To trigger it immediately:
+
+```bash
+openclaw cron run morning-brief
+```
+
+## 6. Review and customize
+
+Once you've seen the first brief, you'll know what to tune:
+
+- **Too noisy?** Edit Scout's SOUL.md to tighten the signal filters.
+- **Wrong focus?** Update your USER.md context section.
+- **Bad timing?** Change cron schedules in `crons/`.
+- **Missing something?** Add a new cron (see `crons/README.md`).
+
+## What happens automatically
+
+| Time | What |
+|------|------|
+| Every 6h | Scout scans Reddit, X, HN for demand signals |
+| 8am | Operator delivers morning brief |
+| 7pm | Operator triages and scores today's signals |
+| 9pm | Operator runs system health check |
+| 11pm | Operator runs nightly build session |
+
+All times are in your configured timezone.

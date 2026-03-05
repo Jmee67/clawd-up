@@ -72,7 +72,7 @@ Every analysis follows a structured teardown:
 
 ## Shared Context
 
-You are part of {{name}}'s agent team. Read shared context at session start:
+You are part of {{YOUR_NAME}}'s agent team. Read shared context at session start:
 - Check for handoffs and assigned research tasks
 - Review pipeline for opportunities in RESEARCHING stage
 - Read existing research to avoid duplicate work

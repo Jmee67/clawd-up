@@ -43,10 +43,10 @@ Score each opportunity across 5 dimensions (1-5 scale). Total out of 25.
 
 | Total | Action |
 |-------|--------|
-| 20-25 | 🟢 Strong GO — start building |
-| 15-19 | 🟡 Promising — validate further, then decide |
-| 10-14 | 🟠 Weak — park it, revisit if signal strengthens |
-| 5-9 | 🔴 Kill — not worth the time |
+| 20-25 | Strong GO — start building |
+| 15-19 | Promising — validate further, then decide |
+| 10-14 | Weak — park it, revisit if signal strengthens |
+| 5-9 | Kill — not worth the time |
 
 ## Template
 

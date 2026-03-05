@@ -1,12 +1,9 @@
 {
   "name": "triage",
-  "description": "Score all signals from today and auto-promote 7+ to pipeline",
-  "schedule": "0 20 * * *",
-  "timezone": "{{timezone}}",
+  "description": "Score and triage signals collected during the day",
+  "schedule": "0 19 * * *",
+  "timezone": "{{TIMEZONE}}",
   "agent": "operator",
-  "model": "{{model_operator}}",
-  "tier": "pro",
-  "channel": "{{channel}}",
-  "chat_id": "{{chat_id}}",
-  "prompt": "Run signal triage. Read all signal files from /research/ updated today. Score each 1-10 against: pain level, willingness to pay, bootstrapper fit, competition gap, signal strength. Auto-promote 7+ to PIPELINE.md at SIGNAL stage. Write triage summary to /research/triage/YYYY-MM-DD.md."
+  "prompt": "Run signal triage. Review all signals collected today. Score each against the rubric (pain/wtp/competition/reach/build, each /5). Promote signals scoring 7+ to the pipeline. Archive anything older than 14 days with no new data. Update PIPELINE.md and write triage summary to daily notes.",
+  "timeoutSeconds": 300
 }

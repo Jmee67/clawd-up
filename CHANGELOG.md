@@ -1,45 +1,36 @@
 # Changelog
 
-## v0.3 (2026-02-20)
-
-### Added
-- Research-backed expert identities for all agents (based on ExpertPrompting, arxiv 2305.14688)
-- Landing page (`landing/index.html`) with hero, pricing, and install flow
-- Subagent delegation protocol with standardized completion signals
-- Personalization interview during setup (work style, context, priorities)
-- Onboarding prompt template (`templates/ONBOARDING-PROMPT.md`)
+## v0.4.0 — 2026-03-05
 
 ### Changed
-- Agent SOULs rewritten from generic labels to detailed expert backgrounds
-- Model map uses stable provider aliases instead of dated model strings
-- Setup wizard version bumped to v0.3
-- `__dirname` fix in setup.js (was using undefined `__filename` variable)
+- Restructured as clean starter kit — buyers get the engine, bring their own config
+- Synced all agent SOULs with live production system
+- Rewrote README and QUICKSTART for technical solopreneurs
+- Consolidated crons to 5 core jobs (morning-brief, signal-scan, triage, nightly-build, system-review)
+- Moved all user-specific content to templates with `{{PLACEHOLDER}}` syntax
+- Updated AGENTS.md with correction loop, memory system, and handover protocol from live system
+- Updated HEARTBEAT.md with nightly build phases and hygiene checklist
 
-### Fixed
-- setup.js crash on line 71 (`__filename` → `__dirname`)
-- Model strings now use stable aliases (`anthropic/claude-sonnet-4-5`) to avoid expiration
-
-## v0.2.1 (2026-02-17)
-
-### Added
-- Correction loop pattern in AGENTS.md template
-- "Never Do This" section in agent SOULs
-- Figure-it-out pattern for agent autonomy
-
-## v0.2 (2026-02-16)
+### Removed
+- Next.js landing page (app/, public/, package.json, etc.)
+- Marketing materials (marketing/, landing/)
+- Immune system scripts (moved to future add-on)
+- Research directory scaffolding (created by setup wizard instead)
+- Growth/content crons (not core to the starter kit)
+- Web research and demand hunt crons (use signal-scan instead)
 
 ### Added
-- Researcher agent with 5S deep dive methodology
-- Operator agent with pipeline management
-- Immune system (Pro tier) for agent drift detection
-- Tier separation (Free/Starter/Pro) with license validation
-- LemonSqueezy license integration with offline grace period
+- `templates/USER.md.template` — profile template with placeholders
+- `templates/MEMORY.md.template` — working memory scaffold
+- `crons/README.md` — explains each cron and how to customize
+- `memory/vault/.gitkeep` — permanent knowledge store
 
-## v0.1 (2026-02-14)
+## v0.3.0 — 2026-02-20
 
-### Added
-- Initial release
-- Scout agent with demand signal scanning
-- Setup wizard (`setup.js`)
-- Cron templates for signal scanning
-- Pipeline and rubric templates
+- Initial public release
+- 3 agents: Scout, Researcher, Operator
+- Pipeline tracking with scoring rubric
+- 9 cron jobs
+- Immune system (validator, pipeline guard, drift detector, cost monitor)
+- Next.js landing page
+- LemonSqueezy license validation
