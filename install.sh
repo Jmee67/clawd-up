@@ -77,12 +77,60 @@ fi
 # ── Parse arguments ──────────────────────────────────────
 
 CONFIG_B64=""
+LICENSE_KEY="${CLAWD_LICENSE_KEY:-}"
 while [[ $# -gt 0 ]]; do
   case $1 in
     --config) CONFIG_B64="$2"; shift 2 ;;
+    --key) LICENSE_KEY="$2"; shift 2 ;;
+    --key=*) LICENSE_KEY="${1#*=}"; shift ;;
     *) shift ;;
   esac
 done
+
+# ── Verify License Key ───────────────────────────────────
+
+echo ""
+echo -e "${BOLD}  License Verification${NC}"
+echo ""
+
+if [ -z "$LICENSE_KEY" ]; then
+  read -p "  Enter your license key: " LICENSE_KEY
+  echo ""
+fi
+
+if [ -z "$LICENSE_KEY" ]; then
+  error "License key required. Purchase at https://clawdup.microbuilder.co"
+  exit 1
+fi
+
+# Validate against LemonSqueezy API
+info "Validating license..."
+VALIDATE_RESPONSE=$(curl -s -X POST "https://api.lemonsqueezy.com/v1/licenses/validate" \
+  -H "Content-Type: application/json" \
+  -d "{\"license_key\": \"${LICENSE_KEY}\", \"instance_name\": \"$(hostname)\"}" 2>/dev/null)
+
+if echo "$VALIDATE_RESPONSE" | grep -q '"valid":true'; then
+  info "License verified"
+
+  # Activate the license instance
+  curl -s -X POST "https://api.lemonsqueezy.com/v1/licenses/activate" \
+    -H "Content-Type: application/json" \
+    -d "{\"license_key\": \"${LICENSE_KEY}\", \"instance_name\": \"$(hostname)\"}" >/dev/null 2>&1
+
+  # Store license key for future updates
+  mkdir -p "${HOME}/.openclaw"
+  echo "$LICENSE_KEY" > "${HOME}/.openclaw/.clawd-license"
+  chmod 600 "${HOME}/.openclaw/.clawd-license"
+else
+  ERROR_MSG=$(echo "$VALIDATE_RESPONSE" | grep -o '"error":"[^"]*"' | head -1 | sed 's/"error":"//;s/"$//')
+  if [ -n "$ERROR_MSG" ]; then
+    error "License invalid: $ERROR_MSG"
+  else
+    error "License validation failed. Check your key and try again."
+  fi
+  echo "  Purchase at: https://clawdup.microbuilder.co"
+  exit 1
+fi
 
 # ── Clone Clawd Up if not already present ────────────────
 
@@ -179,5 +227,6 @@ echo "    openclaw cron list         — See scheduled jobs"
 echo "    cat ~/.openclaw/workspace/PIPELINE.md — View your pipeline"
 echo ""
 echo "  Your first daily brief arrives at 8am your timezone."
+echo "  Your license key is stored at ~/.openclaw/.clawd-license"
 echo "  Questions? https://github.com/Jmee67/clawd-up/issues"
 echo ""
